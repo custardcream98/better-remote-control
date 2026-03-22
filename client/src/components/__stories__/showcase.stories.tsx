@@ -124,8 +124,10 @@ export const TerminalWithClaude: Story = {
           send={noopSend}
           stickyCtrl={false}
           stickyAlt={false}
+          stickyShift={false}
           onToggleCtrl={noop}
           onToggleAlt={noop}
+          onToggleShift={noop}
           onStickyReset={noop}
         />
       </div>

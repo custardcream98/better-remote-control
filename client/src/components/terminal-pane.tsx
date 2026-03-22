@@ -1,4 +1,5 @@
 import { FitAddon } from "@xterm/addon-fit";
+import { SearchAddon } from "@xterm/addon-search";
 import { WebLinksAddon } from "@xterm/addon-web-links";
 import { Terminal } from "@xterm/xterm";
 import { useEffect, useRef } from "react";
@@ -15,47 +16,68 @@ function safeFit(term: Terminal, fit: FitAddon) {
   }
 }
 
+export interface TerminalSearchHandle {
+  findNext: (query: string) => void;
+  findPrevious: (query: string) => void;
+  clearSearch: () => void;
+}
+
 interface TerminalPaneProps {
   sessionId: string;
   send: (msg: ClientMessage) => void;
+  fontSize: number;
   stickyCtrl: boolean;
   stickyAlt: boolean;
+  stickyShift: boolean;
   onStickyReset: () => void;
   /** 외부에서 데이터를 write하기 위한 콜백 등록 */
   onReady: (write: (data: string) => void) => void;
+  /** 검색 핸들 등록 */
+  onSearchReady?: (handle: TerminalSearchHandle) => void;
+  /** 터미널 벨 발생 시 콜백 */
+  onBell?: () => void;
 }
 
 export function TerminalPane({
   sessionId,
   send,
+  fontSize,
   stickyCtrl,
   stickyAlt,
+  stickyShift,
   onStickyReset,
   onReady,
+  onSearchReady,
+  onBell,
 }: TerminalPaneProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const termRef = useRef<Terminal | null>(null);
   const fitRef = useRef<FitAddon | null>(null);
-  const stickyRef = useRef({ ctrl: stickyCtrl, alt: stickyAlt });
+  const stickyRef = useRef({ ctrl: stickyCtrl, alt: stickyAlt, shift: stickyShift });
   const sendRef = useRef(send);
   const sessionIdRef = useRef(sessionId);
   const onStickyResetRef = useRef(onStickyReset);
+  const onBellRef = useRef(onBell);
+  const fontSizeRef = useRef(fontSize);
 
   // 최신 prop 값을 ref에 동기화 (이벤트 핸들러에서 stale closure 방지)
   useEffect(() => {
-    stickyRef.current = { ctrl: stickyCtrl, alt: stickyAlt };
+    stickyRef.current = { ctrl: stickyCtrl, alt: stickyAlt, shift: stickyShift };
     sendRef.current = send;
     sessionIdRef.current = sessionId;
     onStickyResetRef.current = onStickyReset;
+    onBellRef.current = onBell;
+    fontSizeRef.current = fontSize;
   });
 
+  // 터미널 초기화
   useEffect(() => {
     if (!containerRef.current) return;
 
     const term = new Terminal({
       cursorBlink: true,
       scrollback: 5000,
-      fontSize: 14,
+      fontSize: fontSizeRef.current,
       fontFamily: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace',
       theme: {
         background: "#1a1a2e",
@@ -67,7 +89,9 @@ export function TerminalPane({
     });
 
     const fit = new FitAddon();
+    const search = new SearchAddon();
     term.loadAddon(fit);
+    term.loadAddon(search);
     term.loadAddon(new WebLinksAddon());
     term.open(containerRef.current);
     fit.fit();
@@ -85,18 +109,30 @@ export function TerminalPane({
       });
     });
 
+    // 검색 핸들 전달
+    onSearchReady?.({
+      findNext: (q) => search.findNext(q),
+      findPrevious: (q) => search.findPrevious(q),
+      clearSearch: () => search.clearDecorations(),
+    });
+
+    // 벨 이벤트
+    term.onBell(() => onBellRef.current?.());
+
     term.onData((data) => {
       let modified = data;
-      const { ctrl, alt } = stickyRef.current;
+      const { ctrl, alt, shift } = stickyRef.current;
+      if (shift && data.length === 1) {
+        modified = data.toUpperCase();
+      }
       if (ctrl && data.length === 1) {
-        const code = data.toLowerCase().charCodeAt(0);
+        const code = modified.toLowerCase().charCodeAt(0);
         if (code >= 97 && code <= 122) modified = String.fromCharCode(code - 96);
-        onStickyResetRef.current();
       }
       if (alt) {
         modified = "\x1b" + modified;
-        onStickyResetRef.current();
       }
+      if (ctrl || alt || shift) onStickyResetRef.current();
       sendRef.current({ type: "input", sessionId: sessionIdRef.current, data: modified });
     });
 
@@ -138,6 +174,20 @@ export function TerminalPane({
       fitRef.current = null;
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 폰트 크기 동적 반영
+  useEffect(() => {
+    if (termRef.current && fitRef.current) {
+      termRef.current.options.fontSize = fontSize;
+      safeFit(termRef.current, fitRef.current);
+      sendRef.current({
+        type: "resize",
+        sessionId: sessionIdRef.current,
+        cols: termRef.current.cols,
+        rows: termRef.current.rows,
+      });
+    }
+  }, [fontSize]);
 
   return <div ref={containerRef} className="absolute inset-0" />;
 }

@@ -37,6 +37,7 @@ const defaultSocketValue: SocketContextValue = {
     setTimeout(() => cb("mock-new-session"), 1000);
   },
   addOutputListener: () => () => {},
+  getSessionOutput: () => [],
 };
 
 /* ─── MockSocketProvider ─── */

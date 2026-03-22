@@ -19,8 +19,10 @@ interface QuickKeysProps {
   send: (msg: ClientMessage) => void;
   stickyCtrl: boolean;
   stickyAlt: boolean;
+  stickyShift: boolean;
   onToggleCtrl: () => void;
   onToggleAlt: () => void;
+  onToggleShift: () => void;
   onStickyReset: () => void;
 }
 
@@ -46,13 +48,24 @@ const enterKey = cn(
   "shadow-[0_1px_2px_rgba(0,0,0,0.4),0_0_8px_rgba(233,69,96,0.2)]",
 );
 
+// Shift + 화살표: ;2 modifier 추가, Shift + Tab: back-tab
+const shiftArrowMap: Record<string, string> = {
+  "\x1b[A": "\x1b[1;2A",
+  "\x1b[B": "\x1b[1;2B",
+  "\x1b[C": "\x1b[1;2C",
+  "\x1b[D": "\x1b[1;2D",
+  "\t": "\x1b[Z",
+};
+
 export function QuickKeys({
   activeSessionId,
   send,
   stickyCtrl,
   stickyAlt,
+  stickyShift,
   onToggleCtrl,
   onToggleAlt,
+  onToggleShift,
   onStickyReset,
 }: QuickKeysProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -64,12 +77,12 @@ export function QuickKeys({
   const sendKey = useCallback(
     (seq: string) => {
       if (!activeSessionId) return;
-      let data = seq;
+      let data = stickyShift && shiftArrowMap[seq] ? shiftArrowMap[seq] : seq;
       if (stickyAlt) data = "\x1b" + data;
-      if (stickyCtrl || stickyAlt) onStickyReset();
+      if (stickyCtrl || stickyAlt || stickyShift) onStickyReset();
       send({ type: "input", sessionId: activeSessionId, data });
     },
-    [activeSessionId, send, stickyCtrl, stickyAlt, onStickyReset],
+    [activeSessionId, send, stickyCtrl, stickyAlt, stickyShift, onStickyReset],
   );
 
   function startRepeat(seq: string) {
@@ -128,13 +141,16 @@ export function QuickKeys({
 
   return (
     <div className="shrink-0 border-t border-[#1a1f38]/50 bg-[#0c0e1a] px-[10px] pb-[max(10px,env(safe-area-inset-bottom))] pt-[10px]">
-      {/* 1행: Ctrl Alt Tab Esc Enter — 5개 */}
+      {/* 1행: Ctrl Alt Shift Tab Esc Enter */}
       <div className="flex gap-[6px]">
         <button className={cn(key, stickyCtrl && modKeyActive)} onClick={onToggleCtrl}>
           Ctrl
         </button>
         <button className={cn(key, stickyAlt && modKeyActive)} onClick={onToggleAlt}>
           Alt
+        </button>
+        <button className={cn(key, stickyShift && modKeyActive)} onClick={onToggleShift}>
+          Shift
         </button>
         <button className={key} onClick={() => sendKey("\t")}>
           Tab

@@ -20,6 +20,7 @@ type Story = StoryObj<typeof QuickKeys>;
 function QuickKeysWithState() {
   const [ctrl, setCtrl] = useState(false);
   const [alt, setAlt] = useState(false);
+  const [shift, setShift] = useState(false);
 
   return (
     <div
@@ -36,11 +37,14 @@ function QuickKeysWithState() {
         send={(msg) => console.log("send:", msg)}
         stickyCtrl={ctrl}
         stickyAlt={alt}
+        stickyShift={shift}
         onToggleCtrl={() => setCtrl((p) => !p)}
         onToggleAlt={() => setAlt((p) => !p)}
+        onToggleShift={() => setShift((p) => !p)}
         onStickyReset={() => {
           setCtrl(false);
           setAlt(false);
+          setShift(false);
         }}
       />
     </div>
@@ -59,8 +63,10 @@ export const CtrlActive: Story = {
         send={(msg) => console.log("send:", msg)}
         stickyCtrl={true}
         stickyAlt={false}
+        stickyShift={false}
         onToggleCtrl={() => {}}
         onToggleAlt={() => {}}
+        onToggleShift={() => {}}
         onStickyReset={() => {}}
       />
     </div>
@@ -75,8 +81,10 @@ export const NoSession: Story = {
         send={() => {}}
         stickyCtrl={false}
         stickyAlt={false}
+        stickyShift={false}
         onToggleCtrl={() => {}}
         onToggleAlt={() => {}}
+        onToggleShift={() => {}}
         onStickyReset={() => {}}
       />
     </div>

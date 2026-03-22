@@ -26,10 +26,6 @@ interface TerminalPaneProps {
   sessionId: string;
   send: (msg: ClientMessage) => void;
   fontSize: number;
-  stickyCtrl: boolean;
-  stickyAlt: boolean;
-  stickyShift: boolean;
-  onStickyReset: () => void;
   /** Register callback for writing data from outside */
   onReady: (write: (data: string) => void) => void;
   /** Register search handle */
@@ -42,10 +38,6 @@ export function TerminalPane({
   sessionId,
   send,
   fontSize,
-  stickyCtrl,
-  stickyAlt,
-  stickyShift,
-  onStickyReset,
   onReady,
   onSearchReady,
   onBell,
@@ -53,19 +45,15 @@ export function TerminalPane({
   const containerRef = useRef<HTMLDivElement>(null);
   const termRef = useRef<Terminal | null>(null);
   const fitRef = useRef<FitAddon | null>(null);
-  const stickyRef = useRef({ ctrl: stickyCtrl, alt: stickyAlt, shift: stickyShift });
   const sendRef = useRef(send);
   const sessionIdRef = useRef(sessionId);
-  const onStickyResetRef = useRef(onStickyReset);
   const onBellRef = useRef(onBell);
   const fontSizeRef = useRef(fontSize);
 
   // Sync latest prop values to refs (prevent stale closures in event handlers)
   useEffect(() => {
-    stickyRef.current = { ctrl: stickyCtrl, alt: stickyAlt, shift: stickyShift };
     sendRef.current = send;
     sessionIdRef.current = sessionId;
-    onStickyResetRef.current = onStickyReset;
     onBellRef.current = onBell;
     fontSizeRef.current = fontSize;
   });
@@ -120,20 +108,7 @@ export function TerminalPane({
     term.onBell(() => onBellRef.current?.());
 
     term.onData((data) => {
-      let modified = data;
-      const { ctrl, alt, shift } = stickyRef.current;
-      if (shift && data.length === 1) {
-        modified = data.toUpperCase();
-      }
-      if (ctrl && data.length === 1) {
-        const code = modified.toLowerCase().charCodeAt(0);
-        if (code >= 97 && code <= 122) modified = String.fromCharCode(code - 96);
-      }
-      if (alt) {
-        modified = "\x1b" + modified;
-      }
-      if (ctrl || alt || shift) onStickyResetRef.current();
-      sendRef.current({ type: "input", sessionId: sessionIdRef.current, data: modified });
+      sendRef.current({ type: "input", sessionId: sessionIdRef.current, data });
     });
 
     // Touch scroll

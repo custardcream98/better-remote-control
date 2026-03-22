@@ -119,17 +119,7 @@ export const TerminalWithClaude: Story = {
             }}
           />
         </div>
-        <QuickKeys
-          activeSessionId="s1"
-          send={noopSend}
-          stickyCtrl={false}
-          stickyAlt={false}
-          stickyShift={false}
-          onToggleCtrl={noop}
-          onToggleAlt={noop}
-          onToggleShift={noop}
-          onStickyReset={noop}
-        />
+        <QuickKeys activeSessionId="s1" send={noopSend} />
       </div>
     </StoryProviders>
   ),

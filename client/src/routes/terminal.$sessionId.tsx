@@ -23,9 +23,6 @@ function TerminalPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const isMobile = useIsMobile();
-  const [stickyCtrl, setStickyCtrl] = useState(false);
-  const [stickyAlt, setStickyAlt] = useState(false);
-  const [stickyShift, setStickyShift] = useState(false);
   const [fontSize, setFontSize] = useState(getFontSize);
   const [searchOpen, setSearchOpen] = useState(false);
   const searchQueryRef = useRef("");
@@ -69,12 +66,6 @@ function TerminalPage() {
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  const resetSticky = useCallback(() => {
-    setStickyCtrl(false);
-    setStickyAlt(false);
-    setStickyShift(false);
   }, []);
 
   const handleReady = useCallback(
@@ -124,10 +115,6 @@ function TerminalPage() {
           sessionId={sessionId}
           send={send}
           fontSize={fontSize}
-          stickyCtrl={stickyCtrl}
-          stickyAlt={stickyAlt}
-          stickyShift={stickyShift}
-          onStickyReset={resetSticky}
           onReady={handleReady}
           onSearchReady={handleSearchReady}
           onBell={handleBell}
@@ -163,19 +150,7 @@ function TerminalPage() {
           </div>
         )}
       </div>
-      {isMobile && (
-        <QuickKeys
-          activeSessionId={sessionId}
-          send={send}
-          stickyCtrl={stickyCtrl}
-          stickyAlt={stickyAlt}
-          stickyShift={stickyShift}
-          onToggleCtrl={() => setStickyCtrl((p) => !p)}
-          onToggleAlt={() => setStickyAlt((p) => !p)}
-          onToggleShift={() => setStickyShift((p) => !p)}
-          onStickyReset={resetSticky}
-        />
-      )}
+      {isMobile && <QuickKeys activeSessionId={sessionId} send={send} />}
     </div>
   );
 }

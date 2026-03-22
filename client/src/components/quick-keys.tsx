@@ -5,9 +5,8 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  CornerDownLeft,
 } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { cn } from "@/lib/utils";
@@ -17,13 +16,6 @@ import type { ClientMessage } from "@/hooks/use-socket";
 interface QuickKeysProps {
   activeSessionId: string | null;
   send: (msg: ClientMessage) => void;
-  stickyCtrl: boolean;
-  stickyAlt: boolean;
-  stickyShift: boolean;
-  onToggleCtrl: () => void;
-  onToggleAlt: () => void;
-  onToggleShift: () => void;
-  onStickyReset: () => void;
 }
 
 const key = cn(
@@ -36,54 +28,19 @@ const key = cn(
   "active:shadow-none active:translate-y-px",
 );
 
-const modKeyActive = cn(
-  "from-[#e94560]/30 to-[#e94560]/20 border-[#e94560]/60 text-[#e94560]",
-  "shadow-[0_1px_2px_rgba(0,0,0,0.4),0_0_12px_rgba(233,69,96,0.15)]",
-);
+const smallKey = cn(key, "h-7 text-[10px]");
 
-const enterKey = cn(
-  key,
-  "from-[#e94560]/90 to-[#c93a52]/90 text-white/90 border-[#e94560]/40",
-  "active:from-[#c93a52] active:to-[#b0324a]",
-  "shadow-[0_1px_2px_rgba(0,0,0,0.4),0_0_8px_rgba(233,69,96,0.2)]",
-);
-
-// Shift + Arrow: add ;2 modifier, Shift + Tab: back-tab
-const shiftArrowMap: Record<string, string> = {
-  "\x1b[A": "\x1b[1;2A",
-  "\x1b[B": "\x1b[1;2B",
-  "\x1b[C": "\x1b[1;2C",
-  "\x1b[D": "\x1b[1;2D",
-  "\t": "\x1b[Z",
-};
-
-export function QuickKeys({
-  activeSessionId,
-  send,
-  stickyCtrl,
-  stickyAlt,
-  stickyShift,
-  onToggleCtrl,
-  onToggleAlt,
-  onToggleShift,
-  onStickyReset,
-}: QuickKeysProps) {
+export function QuickKeys({ activeSessionId, send }: QuickKeysProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const { t } = useTranslation();
   const repeatTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const repeatIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const sendKey = useCallback(
-    (seq: string) => {
-      if (!activeSessionId) return;
-      let data = stickyShift && shiftArrowMap[seq] ? shiftArrowMap[seq] : seq;
-      if (stickyAlt) data = "\x1b" + data;
-      if (stickyCtrl || stickyAlt || stickyShift) onStickyReset();
-      send({ type: "input", sessionId: activeSessionId, data });
-    },
-    [activeSessionId, send, stickyCtrl, stickyAlt, stickyShift, onStickyReset],
-  );
+  function sendKey(seq: string) {
+    if (!activeSessionId) return;
+    send({ type: "input", sessionId: activeSessionId, data: seq });
+  }
 
   function startRepeat(seq: string) {
     stopRepeat();
@@ -141,31 +98,38 @@ export function QuickKeys({
 
   return (
     <div className="shrink-0 border-t border-[#1a1f38]/50 bg-[#0c0e1a] px-[10px] pb-[max(10px,env(safe-area-inset-bottom))] pt-[10px]">
-      {/* Row 1: Ctrl Alt Shift Tab Esc Enter */}
+      {/* Row 1 (top, less accessible): auxiliary keys */}
       <div className="flex gap-[6px]">
-        <button className={cn(key, stickyCtrl && modKeyActive)} onClick={onToggleCtrl}>
-          Ctrl
+        <button className={smallKey} onClick={() => sendKey("\x03")}>
+          Ctrl+C
         </button>
-        <button className={cn(key, stickyAlt && modKeyActive)} onClick={onToggleAlt}>
-          Alt
+        <button className={smallKey} onClick={() => sendKey("\x1b[Z")}>
+          ⇧Tab
         </button>
-        <button className={cn(key, stickyShift && modKeyActive)} onClick={onToggleShift}>
-          Shift
+        <button className={smallKey} onClick={() => sendKey("\x1b\r")}>
+          Opt↵
         </button>
-        <button className={key} onClick={() => sendKey("\t")}>
-          Tab
+        <button className={smallKey} onClick={() => sendKey("/")}>
+          /
         </button>
-        <button className={key} onClick={() => sendKey("\x1b")}>
-          Esc
-        </button>
-        <button className={enterKey} onClick={() => sendKey("\r")}>
-          <CornerDownLeft size={12} className="mr-1 opacity-70" />
-          Enter
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleFileChange}
+        />
+        <button
+          className={smallKey}
+          disabled={uploading || !activeSessionId}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          {uploading ? <Loader2 size={12} className="animate-spin" /> : <ImagePlus size={12} />}
         </button>
       </div>
 
-      {/* Row 2: Left Down Up Right Opt+Enter — 5 keys (same ratio as row 1) */}
-      <div className="mt-[8px] flex gap-[6px]">
+      {/* Row 2 (bottom, thumb zone): arrows + Tab + Esc */}
+      <div className="mt-[6px] flex gap-[6px]">
         <button className={key} onClick={() => sendKey("\x1b[D")} {...rp("\x1b[D")}>
           <ChevronLeft size={16} />
         </button>
@@ -178,29 +142,11 @@ export function QuickKeys({
         <button className={key} onClick={() => sendKey("\x1b[C")} {...rp("\x1b[C")}>
           <ChevronRight size={16} />
         </button>
-        <button className={cn(key, "text-[10px]")} onClick={() => sendKey("\x1b\r")}>
-          Opt↵
+        <button className={key} onClick={() => sendKey("\t")}>
+          Tab
         </button>
-      </div>
-
-      {/* Row 3: / key + Upload */}
-      <div className="mt-[8px] flex gap-[6px]">
-        <button className={cn(key, "text-xs")} onClick={() => sendKey("/")}>
-          /
-        </button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={handleFileChange}
-        />
-        <button
-          className={key}
-          disabled={uploading || !activeSessionId}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          {uploading ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />}
+        <button className={key} onClick={() => sendKey("\x1b")}>
+          Esc
         </button>
       </div>
     </div>

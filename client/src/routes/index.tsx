@@ -18,10 +18,10 @@ function HomePage() {
 
   return (
     <div className="flex flex-1 flex-col overflow-y-auto">
-      <div className="mx-auto w-full max-w-lg flex-1 p-4">
+      <div className="mx-auto flex w-full max-w-lg flex-1 flex-col p-4">
         {sessions.length === 0 ? (
           // 세션 없을 때 빈 상태 화면
-          <div className="flex flex-1 flex-col items-center justify-center py-20 text-center">
+          <div className="flex flex-1 flex-col items-center justify-center text-center">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--muted)]">
               <Terminal size={28} className="text-[var(--muted-foreground)]" />
             </div>
@@ -41,7 +41,7 @@ function HomePage() {
       </div>
 
       {/* 하단 고정 새 세션 버튼 */}
-      <div className="sticky bottom-0 border-t border-[var(--border)] bg-[var(--background)] p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <div className="shrink-0 border-t border-[var(--border)] bg-[var(--background)] p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <Link
           to="/browse"
           search={{ path: "" }}

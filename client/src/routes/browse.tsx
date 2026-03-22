@@ -100,7 +100,7 @@ function BrowsePage() {
       </div>
 
       {/* 하단 고정 "여기서 터미널 열기" 버튼 */}
-      <div className="border-t border-[var(--border)] bg-[var(--background)] p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <div className="shrink-0 border-t border-[var(--border)] bg-[var(--background)] p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <button
           onClick={handleOpenTerminal}
           disabled={creating}

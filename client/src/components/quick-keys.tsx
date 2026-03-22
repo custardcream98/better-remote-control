@@ -104,10 +104,10 @@ export function QuickKeys({ activeSessionId, send }: QuickKeysProps) {
           Ctrl+C
         </button>
         <button className={smallKey} onClick={() => sendKey("\x1b[Z")}>
-          ⇧Tab
+          Shift+Tab
         </button>
         <button className={smallKey} onClick={() => sendKey("\x1b\r")}>
-          Opt↵
+          Opt+↩
         </button>
         <button className={smallKey} onClick={() => sendKey("/")}>
           /

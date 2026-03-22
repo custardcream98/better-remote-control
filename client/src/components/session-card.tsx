@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { X, Terminal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { cn } from "@/lib/utils";
 
@@ -11,6 +12,7 @@ interface SessionCardProps {
 }
 
 export function SessionCard({ session, onClose }: SessionCardProps) {
+  const { t } = useTranslation();
   return (
     <Link
       to="/terminal/$sessionId"
@@ -46,7 +48,7 @@ export function SessionCard({ session, onClose }: SessionCardProps) {
           e.stopPropagation();
           onClose(session.id);
         }}
-        aria-label="세션 닫기"
+        aria-label={t("session.close")}
         className="rounded-md p-1.5 text-[var(--muted-foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:text-[var(--primary)]"
       >
         <X size={16} aria-hidden="true" />

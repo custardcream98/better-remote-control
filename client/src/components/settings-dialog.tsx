@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +31,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
 function SettingsDialogContent({ onOpenChange }: { onOpenChange: (open: boolean) => void }) {
   const [command, setCommand] = useState(() => getAutoCommand());
+  const { t, i18n } = useTranslation();
 
   function handleSave() {
     if (command.trim()) {
@@ -44,28 +46,40 @@ function SettingsDialogContent({ onOpenChange }: { onOpenChange: (open: boolean)
     <Dialog open onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Settings</DialogTitle>
+          <DialogTitle>{t("settings.title")}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-3 py-2">
           <div className="grid gap-1.5">
-            <Label htmlFor="auto-cmd">Auto Command</Label>
+            <Label htmlFor="auto-cmd">{t("settings.autoCommand")}</Label>
             <Input
               id="auto-cmd"
-              placeholder="새 터미널에서 자동 실행할 명령어…"
+              placeholder={t("settings.autoCommandPlaceholder")}
               value={command}
               onChange={(e) => setCommand(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSave()}
             />
             <p className="text-xs text-[var(--muted-foreground)]">
-              새 터미널 세션 시작 시 자동으로 입력됩니다
+              {t("settings.autoCommandDescription")}
             </p>
+          </div>
+          <div className="grid gap-1.5">
+            <Label htmlFor="lang">{t("settings.language")}</Label>
+            <select
+              id="lang"
+              value={i18n.language.startsWith("ko") ? "ko" : "en"}
+              onChange={(e) => i18n.changeLanguage(e.target.value)}
+              className="w-full rounded-md border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+            >
+              <option value="en">English</option>
+              <option value="ko">한국어</option>
+            </select>
           </div>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t("settings.cancel")}
           </Button>
-          <Button onClick={handleSave}>Save</Button>
+          <Button onClick={handleSave}>{t("settings.save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

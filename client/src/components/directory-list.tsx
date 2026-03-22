@@ -1,4 +1,5 @@
 import { ArrowUp, ChevronRight, Folder } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface DirectoryListProps {
   dirs: { name: string }[];
@@ -19,6 +20,7 @@ export function DirectoryList({
   showParent,
   onRetry,
 }: DirectoryListProps) {
+  const { t } = useTranslation();
   if (loading) {
     return (
       <div className="flex flex-col gap-2 p-4">
@@ -37,7 +39,7 @@ export function DirectoryList({
           onClick={onRetry}
           className="rounded-lg bg-[var(--muted)] px-4 py-2 text-sm text-[var(--foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:opacity-80"
         >
-          재시도
+          {t("directory.retry")}
         </button>
       </div>
     );
@@ -59,7 +61,7 @@ export function DirectoryList({
       )}
       {visibleDirs.length === 0 ? (
         <p className="py-16 text-center text-sm text-[var(--muted-foreground)]">
-          하위 디렉토리 없음
+          {t("directory.noSubdirectories")}
         </p>
       ) : (
         visibleDirs.map((d) => (

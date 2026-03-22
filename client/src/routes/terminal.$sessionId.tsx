@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { QuickKeys } from "@/components/quick-keys";
 import { TerminalPane } from "@/components/terminal-pane";
@@ -13,6 +14,7 @@ function TerminalPage() {
   const { sessionId } = Route.useParams();
   const { sessions, send, addOutputListener } = useSessionContext();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [stickyCtrl, setStickyCtrl] = useState(false);
   const [stickyAlt, setStickyAlt] = useState(false);
   const writeRef = useRef<((data: string) => void) | null>(null);
@@ -72,7 +74,7 @@ function TerminalPage() {
               to="/"
               className="rounded-xl bg-[var(--primary)] px-6 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:opacity-80"
             >
-              홈으로 돌아가기
+              {t("terminal.goHome")}
             </Link>
           </div>
         )}

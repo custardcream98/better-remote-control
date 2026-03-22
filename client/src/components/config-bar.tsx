@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Home, Settings } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { SettingsDialog } from "@/components/settings-dialog";
 import { useSessionContext } from "@/contexts/socket-context";
@@ -10,6 +11,7 @@ export function ConfigBar() {
   const { status } = useSessionContext();
   const location = useLocation();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const { t } = useTranslation();
   const showHome = location.pathname !== "/";
 
   return (
@@ -40,15 +42,15 @@ export function ConfigBar() {
         />
         <span className="sr-only">
           {status === "connected"
-            ? "연결됨"
+            ? t("config.connected")
             : status === "disconnected"
-              ? "연결 끊김"
-              : "재연결 중"}
+              ? t("config.disconnected")
+              : t("config.reconnecting")}
         </span>
 
         <button
           onClick={() => setSettingsOpen(true)}
-          aria-label="설정"
+          aria-label={t("config.settings")}
           className="rounded-md p-1.5 text-[var(--muted-foreground)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:text-[var(--foreground)]"
         >
           <Settings size={16} />

@@ -8,6 +8,7 @@ import {
   CornerDownLeft,
 } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { cn } from "@/lib/utils";
 
@@ -56,6 +57,7 @@ export function QuickKeys({
 }: QuickKeysProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const { t } = useTranslation();
   const repeatTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const repeatIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -103,7 +105,7 @@ export function QuickKeys({
     const file = e.target.files?.[0];
     if (!file || !activeSessionId) return;
     if (file.size > 10 * 1024 * 1024) {
-      alert("10MB 이하만");
+      alert(t("upload.maxSize"));
       return;
     }
     setUploading(true);
@@ -117,7 +119,7 @@ export function QuickKeys({
       const { filePath } = await res.json();
       send({ type: "input", sessionId: activeSessionId, data: filePath + " " });
     } catch {
-      alert("업로드 실패");
+      alert(t("upload.failed"));
     } finally {
       setUploading(false);
       e.target.value = "";

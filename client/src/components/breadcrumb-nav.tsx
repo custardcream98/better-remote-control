@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 interface BreadcrumbNavProps {
   path: string;
@@ -8,6 +9,7 @@ interface BreadcrumbNavProps {
 
 export function BreadcrumbNav({ path, onNavigate }: BreadcrumbNavProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   // 마지막 세그먼트가 보이도록 자동 스크롤
   useEffect(() => {
@@ -19,7 +21,7 @@ export function BreadcrumbNav({ path, onNavigate }: BreadcrumbNavProps) {
   const segments = path.split("/").filter(Boolean);
 
   return (
-    <nav aria-label="경로">
+    <nav aria-label={t("breadcrumb.path")}>
       <div
         ref={scrollRef}
         className="scrollbar-none flex items-center gap-1 overflow-x-auto px-4 py-2 text-sm"

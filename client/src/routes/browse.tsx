@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { BreadcrumbNav } from "@/components/breadcrumb-nav";
 import { DirectoryList } from "@/components/directory-list";
@@ -17,6 +18,7 @@ function BrowsePage() {
   const { path: searchPath } = Route.useSearch();
   const { config, send, onceCreated } = useSessionContext();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const currentPath = searchPath || config.defaultCwd || "/";
   const [dirs, setDirs] = useState<{ name: string }[]>([]);
@@ -79,7 +81,7 @@ function BrowsePage() {
     timeoutRef.current = setTimeout(() => {
       timeoutRef.current = null;
       setCreating(false);
-      setError("세션 생성 시간 초과");
+      setError(t("browse.sessionTimeout"));
     }, 5000);
   }
 
@@ -106,7 +108,7 @@ function BrowsePage() {
           disabled={creating}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:opacity-80 disabled:opacity-50"
         >
-          {creating ? "생성 중\u2026" : "여기서 터미널 열기"}
+          {creating ? t("browse.creating") : t("browse.openTerminal")}
         </button>
       </div>
     </div>

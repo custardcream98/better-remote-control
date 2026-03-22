@@ -1,0 +1,17 @@
+{
+  "id": "/",
+  "name": "Better Remote Control",
+  "short_name": "brc",
+  "description": "Your local terminal, on your phone.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

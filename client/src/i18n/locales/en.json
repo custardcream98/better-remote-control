@@ -1,0 +1,44 @@
+{
+  "home": {
+    "noSessions": "No sessions",
+    "noSessionsDescription": "Start a new session to open a terminal",
+    "newSession": "New Session"
+  },
+  "browse": {
+    "openTerminal": "Open Terminal Here",
+    "creating": "Creating\u2026",
+    "sessionTimeout": "Session creation timed out"
+  },
+  "terminal": {
+    "goHome": "Back to Home"
+  },
+  "config": {
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "reconnecting": "Reconnecting",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "autoCommand": "Auto Command",
+    "autoCommandPlaceholder": "Command to auto-run in new terminals\u2026",
+    "autoCommandDescription": "Automatically entered when a new terminal session starts",
+    "language": "Language",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "session": {
+    "close": "Close session"
+  },
+  "breadcrumb": {
+    "path": "Path"
+  },
+  "directory": {
+    "retry": "Retry",
+    "noSubdirectories": "No subdirectories"
+  },
+  "upload": {
+    "maxSize": "10MB max",
+    "failed": "Upload failed"
+  }
+}

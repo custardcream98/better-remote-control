@@ -37,7 +37,8 @@
     "save": "Save"
   },
   "session": {
-    "close": "Close session"
+    "close": "Close session",
+    "rename": "Rename session"
   },
   "breadcrumb": {
     "path": "Path"

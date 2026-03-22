@@ -1,4 +1,4 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useParams } from "@tanstack/react-router";
 import { Home, Settings } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,25 +9,33 @@ import { useSessionContext } from "@/contexts/socket-context";
 import { cn } from "@/lib/utils";
 
 export function ConfigBar() {
-  const { status } = useSessionContext();
+  const { status, sessions } = useSessionContext();
   const location = useLocation();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { t } = useTranslation();
-  const showHome = location.pathname !== "/";
+  const isHome = location.pathname === "/";
+
+  // Get session name when on terminal page
+  const params = useParams({ strict: false }) as { sessionId?: string };
+  const sessionName = params.sessionId
+    ? sessions.find((s) => s.id === params.sessionId)?.name
+    : undefined;
 
   return (
     <header className="border-border bg-card flex h-11 shrink-0 items-center justify-between border-b px-3 pt-[env(safe-area-inset-top)]">
-      <div className="flex items-center gap-2">
-        {showHome ? (
+      <div className="flex min-w-0 items-center gap-2">
+        {isHome ? (
+          <BrcLogo />
+        ) : (
           <Link
             to="/"
             className="text-muted-foreground active:text-foreground flex items-center gap-1.5 transition-colors"
           >
             <Home size={16} aria-hidden="true" />
-            <BrcLogo />
           </Link>
-        ) : (
-          <BrcLogo />
+        )}
+        {sessionName && (
+          <span className="text-foreground truncate text-sm font-medium">{sessionName}</span>
         )}
       </div>
 

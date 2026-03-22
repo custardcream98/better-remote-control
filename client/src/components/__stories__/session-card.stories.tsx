@@ -31,6 +31,7 @@ type Story = StoryObj<typeof SessionCard>;
 export const Active: Story = {
   args: {
     session: { id: "sess-1", name: "dev-server", cwd: "/home/user/project" },
+    send: (msg) => console.log("send:", msg),
     onClose: (id: string) => console.log("close:", id),
   },
 };
@@ -39,6 +40,7 @@ export const Active: Story = {
 export const Exited: Story = {
   args: {
     session: { id: "sess-2", name: "build", cwd: "/home/user/project", exited: true },
+    send: (msg) => console.log("send:", msg),
     onClose: (id: string) => console.log("close:", id),
   },
 };
@@ -51,6 +53,7 @@ export const LongName: Story = {
       name: "very-long-session-name-that-should-be-truncated-in-the-ui",
       cwd: "/home/user/workspace/projects/some-very-deep-nested/directory/path",
     },
+    send: (msg) => console.log("send:", msg),
     onClose: (id: string) => console.log("close:", id),
   },
 };
@@ -61,14 +64,17 @@ export const Multiple: Story = {
     <div style={{ display: "grid", gap: 12 }}>
       <SessionCard
         session={{ id: "sess-1", name: "dev-server", cwd: "/home/user/project" }}
+        send={(msg) => console.log("send:", msg)}
         onClose={(id) => console.log("close:", id)}
       />
       <SessionCard
         session={{ id: "sess-2", name: "build", cwd: "/home/user/project", exited: true }}
+        send={(msg) => console.log("send:", msg)}
         onClose={(id) => console.log("close:", id)}
       />
       <SessionCard
         session={{ id: "sess-3", name: "test-runner", cwd: "/home/user/project/tests" }}
+        send={(msg) => console.log("send:", msg)}
         onClose={(id) => console.log("close:", id)}
       />
     </div>

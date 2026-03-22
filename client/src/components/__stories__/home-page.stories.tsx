@@ -64,7 +64,7 @@ function HomePageLayout({
             /* Session list */
             <div style={{ display: "grid", gap: 12 }}>
               {sessions.map((s) => (
-                <SessionCard key={s.id} session={s} onClose={onClose} />
+                <SessionCard key={s.id} session={s} send={() => {}} onClose={onClose} />
               ))}
             </div>
           )}

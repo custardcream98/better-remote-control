@@ -34,7 +34,7 @@ function HomePage() {
           // Session list card grid
           <div className="grid gap-3">
             {sessions.map((s) => (
-              <SessionCard key={s.id} session={s} onClose={handleClose} />
+              <SessionCard key={s.id} session={s} send={send} onClose={handleClose} />
             ))}
           </div>
         )}

@@ -152,7 +152,7 @@ function MultiSessionHome({ sessions }: { sessions: SessionInfo[] }) {
         <div style={{ maxWidth: 512, margin: "0 auto", padding: 16 }}>
           <div style={{ display: "grid", gap: 12 }}>
             {sessions.map((s) => (
-              <SessionCard key={s.id} session={s} onClose={noop} />
+              <SessionCard key={s.id} session={s} send={noopSend} onClose={noop} />
             ))}
           </div>
         </div>

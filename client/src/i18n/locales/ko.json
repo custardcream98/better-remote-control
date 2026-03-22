@@ -37,7 +37,8 @@
     "save": "저장"
   },
   "session": {
-    "close": "세션 닫기"
+    "close": "세션 닫기",
+    "rename": "세션 이름 변경"
   },
   "breadcrumb": {
     "path": "경로"

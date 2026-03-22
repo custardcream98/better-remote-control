@@ -6,6 +6,7 @@
  * 조합해 페이지 레이아웃을 시각적으로 재현합니다.
  */
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { BreadcrumbNav } from "../breadcrumb-nav";
 import { DirectoryList } from "../directory-list";
@@ -50,6 +51,7 @@ function BrowsePageLayout({
   loading?: boolean;
   error?: string | null;
 }) {
+  const { t } = useTranslation();
   const [path, setPath] = useState(initialPath);
   const [creating, setCreating] = useState(false);
 
@@ -65,7 +67,7 @@ function BrowsePageLayout({
 
   function handleOpenTerminal() {
     setCreating(true);
-    console.log("터미널 열기:", path);
+    console.log("open terminal:", path);
     setTimeout(() => setCreating(false), 2000);
   }
 
@@ -85,14 +87,14 @@ function BrowsePageLayout({
         />
       </div>
 
-      {/* 하단 고정 "여기서 터미널 열기" 버튼 */}
+      {/* 하단 고정 버튼 */}
       <div className="border-t border-[var(--border)] bg-[var(--background)] p-4">
         <button
           onClick={handleOpenTerminal}
           disabled={creating}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity active:opacity-80 disabled:opacity-50"
         >
-          {creating ? "생성 중\u2026" : "여기서 터미널 열기"}
+          {creating ? t("browse.creating") : t("browse.openTerminal")}
         </button>
       </div>
     </div>
@@ -123,7 +125,7 @@ export const Loading: Story = {
 export const Error: Story = {
   render: () => (
     <StoryProviders>
-      <BrowsePageLayout dirs={[]} error="디렉토리를 불러올 수 없습니다" />
+      <BrowsePageLayout dirs={[]} error="Failed to load directory" />
     </StoryProviders>
   ),
 };

@@ -70,7 +70,7 @@ export const Error: Story = {
   args: {
     dirs: [],
     loading: false,
-    error: "디렉토리를 불러올 수 없습니다",
+    error: "Failed to load directory",
     onNavigate: noop,
     onGoUp: noop,
     showParent: false,

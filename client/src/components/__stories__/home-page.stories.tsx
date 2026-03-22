@@ -5,6 +5,7 @@
  * 의존하므로, 여기서는 페이지를 구성하는 컴포넌트들을 조합해 시각적으로 동일하게 렌더합니다.
  */
 import { Plus, Terminal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { SessionCard } from "../session-card";
 import { StoryProviders, mockSessions } from "./mock-providers";
@@ -33,6 +34,7 @@ function HomePageLayout({
   sessions: SessionInfo[];
   onClose: (id: string) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100dvh" }}>
       <div style={{ flex: 1, overflowY: "auto" }}>
@@ -53,9 +55,11 @@ function HomePageLayout({
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--muted)]">
                 <Terminal size={28} className="text-[var(--muted-foreground)]" />
               </div>
-              <p className="mb-1 text-sm font-medium text-[var(--foreground)]">세션 없음</p>
+              <p className="mb-1 text-sm font-medium text-[var(--foreground)]">
+                {t("home.noSessions")}
+              </p>
               <p className="mb-6 text-xs text-[var(--muted-foreground)]">
-                새 세션을 시작해서 터미널을 열어보세요
+                {t("home.noSessionsDescription")}
               </p>
             </div>
           ) : (
@@ -73,9 +77,10 @@ function HomePageLayout({
       <div className="border-t border-[var(--border)] bg-[var(--background)] p-4">
         <button
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity active:opacity-80"
-          onClick={() => console.log("새 세션 시작")}
+          onClick={() => console.log("new session")}
         >
-          <Plus size={18} />새 세션 시작
+          <Plus size={18} />
+          {t("home.newSession")}
         </button>
       </div>
     </div>

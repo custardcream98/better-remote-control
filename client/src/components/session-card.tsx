@@ -13,7 +13,6 @@ interface SessionCardProps {
 export function SessionCard({ session, onClose }: SessionCardProps) {
   return (
     <Link
-      // @ts-expect-error -- /terminal/$sessionId 라우트는 Task 8에서 추가됨
       to="/terminal/$sessionId"
       params={{ sessionId: session.id }}
       className={cn(

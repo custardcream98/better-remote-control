@@ -73,7 +73,6 @@ function BrowsePage() {
     onceCreated((sessionId) => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       setCreating(false);
-      // @ts-expect-error -- /terminal/$sessionId 라우트는 Task 8에서 추가됨
       navigate({ to: "/terminal/$sessionId", params: { sessionId } });
     });
     // 타임아웃: 5초 내 응답 없으면 복원 + 에러 표시

@@ -11,3 +11,8 @@ createRoot(document.getElementById("root")!).render(
     <RouterProvider router={router} />
   </StrictMode>,
 );
+
+// Service Worker 등록 (PWA 알림용)
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js").catch(() => {});
+}

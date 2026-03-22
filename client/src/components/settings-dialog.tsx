@@ -13,9 +13,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const STORAGE_KEY = "brc_auto_command";
+const FONT_SIZE_KEY = "brc_font_size";
+const BELL_NOTIFICATION_KEY = "brc_bell_notification";
+const DEFAULT_FONT_SIZE = 14;
 
 export function getAutoCommand(): string {
   return localStorage.getItem(STORAGE_KEY) ?? "";
+}
+
+export function getFontSize(): number {
+  const val = localStorage.getItem(FONT_SIZE_KEY);
+  return val ? Number(val) : DEFAULT_FONT_SIZE;
+}
+
+export function isBellNotificationEnabled(): boolean {
+  return localStorage.getItem(BELL_NOTIFICATION_KEY) === "true";
 }
 
 interface SettingsDialogProps {
@@ -31,7 +43,23 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
 function SettingsDialogContent({ onOpenChange }: { onOpenChange: (open: boolean) => void }) {
   const [command, setCommand] = useState(() => getAutoCommand());
+  const [fontSize, setFontSize] = useState(() => getFontSize());
+  const [bellEnabled, setBellEnabled] = useState(() => isBellNotificationEnabled());
   const { t, i18n } = useTranslation();
+
+  const notificationSupported = "Notification" in window;
+  const notificationDenied = notificationSupported && Notification.permission === "denied";
+
+  async function handleBellToggle(checked: boolean) {
+    if (checked && notificationSupported && Notification.permission !== "granted") {
+      const result = await Notification.requestPermission();
+      if (result !== "granted") {
+        setBellEnabled(false);
+        return;
+      }
+    }
+    setBellEnabled(checked);
+  }
 
   function handleSave() {
     if (command.trim()) {
@@ -39,6 +67,9 @@ function SettingsDialogContent({ onOpenChange }: { onOpenChange: (open: boolean)
     } else {
       localStorage.removeItem(STORAGE_KEY);
     }
+    localStorage.setItem(FONT_SIZE_KEY, String(fontSize));
+    localStorage.setItem(BELL_NOTIFICATION_KEY, String(bellEnabled));
+    window.dispatchEvent(new CustomEvent("brc:settings-changed"));
     onOpenChange(false);
   }
 
@@ -60,6 +91,54 @@ function SettingsDialogContent({ onOpenChange }: { onOpenChange: (open: boolean)
             />
             <p className="text-xs text-[var(--muted-foreground)]">
               {t("settings.autoCommandDescription")}
+            </p>
+          </div>
+          <div className="grid gap-1.5">
+            <Label htmlFor="font-size">{t("settings.fontSize")}</Label>
+            <div className="flex items-center gap-3">
+              <input
+                id="font-size"
+                type="range"
+                min={10}
+                max={24}
+                step={1}
+                value={fontSize}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  setFontSize(val);
+                  // 슬라이더 조작 시 즉시 미리보기
+                  localStorage.setItem(FONT_SIZE_KEY, String(val));
+                  window.dispatchEvent(new CustomEvent("brc:settings-changed"));
+                }}
+                className="flex-1"
+              />
+              <span className="w-10 text-right text-sm tabular-nums text-[var(--foreground)]">
+                {fontSize}px
+              </span>
+            </div>
+          </div>
+          <div className="grid gap-1.5">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="bell-notification">{t("settings.bellNotification")}</Label>
+              <button
+                id="bell-notification"
+                role="switch"
+                aria-checked={bellEnabled}
+                disabled={notificationDenied}
+                onClick={() => handleBellToggle(!bellEnabled)}
+                className="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                style={{ backgroundColor: bellEnabled ? "var(--primary)" : "var(--muted)" }}
+              >
+                <span
+                  className="pointer-events-none block h-4 w-4 rounded-full bg-white shadow-sm transition-transform"
+                  style={{ transform: bellEnabled ? "translateX(16px)" : "translateX(0)" }}
+                />
+              </button>
+            </div>
+            <p className="text-xs text-[var(--muted-foreground)]">
+              {notificationDenied
+                ? t("settings.notificationDenied")
+                : t("settings.bellNotificationDescription")}
             </p>
           </div>
           <div className="grid gap-1.5">

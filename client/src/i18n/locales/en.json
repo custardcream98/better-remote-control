@@ -10,7 +10,12 @@
     "sessionTimeout": "Session creation timed out"
   },
   "terminal": {
-    "goHome": "Back to Home"
+    "goHome": "Back to Home",
+    "search": "Search",
+    "searchPlaceholder": "Find in terminal\u2026",
+    "searchPrevious": "Previous match",
+    "searchNext": "Next match",
+    "closeSearch": "Close search"
   },
   "config": {
     "connected": "Connected",
@@ -23,6 +28,10 @@
     "autoCommand": "Auto Command",
     "autoCommandPlaceholder": "Command to auto-run in new terminals\u2026",
     "autoCommandDescription": "Automatically entered when a new terminal session starts",
+    "fontSize": "Terminal Font Size",
+    "bellNotification": "Bell Notification",
+    "bellNotificationDescription": "Show notification on terminal bell (when backgrounded)",
+    "notificationDenied": "Notifications blocked by browser",
     "language": "Language",
     "cancel": "Cancel",
     "save": "Save"

@@ -10,7 +10,12 @@
     "sessionTimeout": "세션 생성 시간 초과"
   },
   "terminal": {
-    "goHome": "홈으로 돌아가기"
+    "goHome": "홈으로 돌아가기",
+    "search": "검색",
+    "searchPlaceholder": "터미널에서 찾기\u2026",
+    "searchPrevious": "이전 결과",
+    "searchNext": "다음 결과",
+    "closeSearch": "검색 닫기"
   },
   "config": {
     "connected": "연결됨",
@@ -23,6 +28,10 @@
     "autoCommand": "자동 명령어",
     "autoCommandPlaceholder": "새 터미널에서 자동 실행할 명령어\u2026",
     "autoCommandDescription": "새 터미널 세션 시작 시 자동으로 입력됩니다",
+    "fontSize": "터미널 글꼴 크기",
+    "bellNotification": "벨 알림",
+    "bellNotificationDescription": "백그라운드에서 터미널 벨 발생 시 알림 표시",
+    "notificationDenied": "브라우저에서 알림이 차단됨",
     "language": "언어",
     "cancel": "취소",
     "save": "저장"

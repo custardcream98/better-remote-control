@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/logo.svg" alt="brc 로고" width="80">
+
 # Better Remote Control
 
 **내 로컬 터미널을, 내 폰에서.**

@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/logo.svg" alt="brc logo" width="80">
+
 # Better Remote Control
 
 **Your local terminal, on your phone.**

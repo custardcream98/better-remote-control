@@ -3,6 +3,7 @@ import { Home, Settings } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { BrcLogo } from "@/components/brc-logo";
 import { SettingsDialog } from "@/components/settings-dialog";
 import { useSessionContext } from "@/contexts/socket-context";
 import { cn } from "@/lib/utils";
@@ -23,10 +24,10 @@ export function ConfigBar() {
             className="flex items-center gap-1.5 text-[var(--muted-foreground)] transition-colors active:text-[var(--foreground)]"
           >
             <Home size={16} aria-hidden="true" />
-            <span className="text-sm font-medium">brc</span>
+            <BrcLogo />
           </Link>
         ) : (
-          <span className="text-sm font-medium text-[var(--foreground)]">brc</span>
+          <BrcLogo />
         )}
       </div>
 

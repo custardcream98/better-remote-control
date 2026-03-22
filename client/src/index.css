@@ -26,11 +26,14 @@
   --radius: 0.5rem;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  border-color: var(--border);
+/* Tailwind CSS 4의 preflight가 box-sizing: border-box와 margin/padding 리셋을 처리하므로
+   별도 * 리셋 불필요. border-color만 base layer에서 지정. */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--border);
+  }
 }
 
 html,

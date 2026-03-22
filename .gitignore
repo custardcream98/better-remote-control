@@ -4,3 +4,4 @@ dist/
 release/
 .DS_Store
 client/src/routeTree.gen.ts
+docs/superpowers/

@@ -354,6 +354,12 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
   );
   app.use(express.static(path.join(__dirname, "..", "public")));
 
+  // SPA fallback — TanStack Router가 클라이언트에서 라우팅 처리
+  app.get("*", (req, res, next) => {
+    if (req.path.startsWith("/api/") || req.path === "/login") return next();
+    res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+  });
+
   // HTTP 서버 시작
   const server = app.listen(port, () => {
     console.log(`  Local: http://localhost:${port}`);
@@ -382,14 +388,6 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
     for (const s of sessions.values()) {
       if (s.outputBuffer) {
         sendTo(ws, { type: "output", sessionId: s.id, data: s.outputBuffer });
-      }
-    }
-
-    // 세션 없으면 기본 세션 생성
-    if (sessions.size === 0) {
-      const session = createSession();
-      if (session) {
-        broadcast({ type: "created", sessionId: session.id, name: session.name, cwd: session.cwd });
       }
     }
 

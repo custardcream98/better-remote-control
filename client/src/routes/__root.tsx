@@ -10,7 +10,7 @@ export const Route = createRootRoute({
 function RootLayout() {
   return (
     <SocketProvider>
-      <div className="flex h-dvh flex-col">
+      <div className="flex h-dvh flex-col overflow-hidden">
         <ConfigBar />
         <Outlet />
       </div>

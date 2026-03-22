@@ -16,9 +16,9 @@ export default meta;
 
 type Story = StoryObj<typeof ConfigBar>;
 
-/* ─── 스토리 ─── */
+/* ─── Stories ─── */
 
-/** 연결됨 상태 (홈 경로 — Home 아이콘 미노출) */
+/** Connected state (home path — Home icon hidden) */
 export const ConnectedAtHome: Story = {
   render: () => (
     <StoryProviders socketOverrides={{ status: "connected" }} initialPath="/">
@@ -27,7 +27,7 @@ export const ConnectedAtHome: Story = {
   ),
 };
 
-/** 연결됨 상태 (하위 경로 — Home 링크 노출) */
+/** Connected state (sub-page — Home link visible) */
 export const ConnectedSubPage: Story = {
   render: () => (
     <StoryProviders socketOverrides={{ status: "connected" }} initialPath="/browse">
@@ -36,7 +36,7 @@ export const ConnectedSubPage: Story = {
   ),
 };
 
-/** 연결 끊김 상태 */
+/** Disconnected state */
 export const Disconnected: Story = {
   render: () => (
     <StoryProviders socketOverrides={{ status: "disconnected" }} initialPath="/">
@@ -45,7 +45,7 @@ export const Disconnected: Story = {
   ),
 };
 
-/** 재연결 중 상태 (깜빡이는 노란 인디케이터) */
+/** Reconnecting state (blinking yellow indicator) */
 export const Reconnecting: Story = {
   render: () => (
     <StoryProviders socketOverrides={{ status: "reconnecting" }} initialPath="/">

@@ -25,9 +25,9 @@ export default meta;
 
 type Story = StoryObj<typeof SessionCard>;
 
-/* ─── 스토리 ─── */
+/* ─── Stories ─── */
 
-/** 활성 세션 */
+/** Active session */
 export const Active: Story = {
   args: {
     session: { id: "sess-1", name: "dev-server", cwd: "/home/user/project" },
@@ -35,7 +35,7 @@ export const Active: Story = {
   },
 };
 
-/** 종료된 세션 (반투명 + 취소선) */
+/** Exited session (semi-transparent + strikethrough) */
 export const Exited: Story = {
   args: {
     session: { id: "sess-2", name: "build", cwd: "/home/user/project", exited: true },
@@ -43,7 +43,7 @@ export const Exited: Story = {
   },
 };
 
-/** 긴 이름 (텍스트 truncate 테스트) */
+/** Long name (text truncate test) */
 export const LongName: Story = {
   args: {
     session: {
@@ -55,7 +55,7 @@ export const LongName: Story = {
   },
 };
 
-/** 여러 카드 함께 표시 */
+/** Multiple cards displayed together */
 export const Multiple: Story = {
   render: () => (
     <div style={{ display: "grid", gap: 12 }}>

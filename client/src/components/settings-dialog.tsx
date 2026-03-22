@@ -36,7 +36,7 @@ interface SettingsDialogProps {
 }
 
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
-  // open 될 때마다 새로 마운트되므로 초기값으로 localStorage 값을 읽음
+  // Re-mounts every time open changes, so read initial values from localStorage
   if (!open) return null;
   return <SettingsDialogContent onOpenChange={onOpenChange} />;
 }
@@ -106,7 +106,7 @@ function SettingsDialogContent({ onOpenChange }: { onOpenChange: (open: boolean)
                 onChange={(e) => {
                   const val = Number(e.target.value);
                   setFontSize(val);
-                  // 슬라이더 조작 시 즉시 미리보기
+                  // Instant preview when adjusting the slider
                   localStorage.setItem(FONT_SIZE_KEY, String(val));
                   window.dispatchEvent(new CustomEvent("brc:settings-changed"));
                 }}

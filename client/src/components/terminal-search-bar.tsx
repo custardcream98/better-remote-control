@@ -27,7 +27,7 @@ export function TerminalSearchBar({
   const inputRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation();
 
-  // 마운트 시 포커스
+  // Focus on mount
   useEffect(() => {
     inputRef.current?.focus();
   }, []);

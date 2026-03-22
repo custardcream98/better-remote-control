@@ -35,14 +35,14 @@ function TerminalPage() {
 
   const session = sessions.find((s) => s.id === sessionId);
 
-  // 세션이 없으면 홈으로 리다이렉트
+  // Redirect to home if session does not exist
   useEffect(() => {
     if (sessions.length > 0 && !session) {
       navigate({ to: "/" });
     }
   }, [sessions, session, navigate]);
 
-  // output 리스너 등록
+  // Register output listener
   useEffect(() => {
     const unsubscribe = addOutputListener((sid, data) => {
       if (sid === sessionId) {
@@ -52,14 +52,14 @@ function TerminalPage() {
     return unsubscribe;
   }, [sessionId, addOutputListener]);
 
-  // 설정 변경 감지 (폰트 크기)
+  // Detect settings changes (font size)
   useEffect(() => {
     const handler = () => setFontSize(getFontSize());
     window.addEventListener("brc:settings-changed", handler);
     return () => window.removeEventListener("brc:settings-changed", handler);
   }, []);
 
-  // 데스크톱 Ctrl+F / Cmd+F 키보드 단축키
+  // Desktop Ctrl+F / Cmd+F keyboard shortcut
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if ((e.ctrlKey || e.metaKey) && e.key === "f") {
@@ -80,7 +80,7 @@ function TerminalPage() {
   const handleReady = useCallback(
     (write: (data: string) => void) => {
       writeRef.current = write;
-      // 세션의 누적 출력 기록을 재생하여 이전 내용 복원
+      // Replay accumulated session output history to restore previous content
       const history = getSessionOutput(sessionId);
       for (const chunk of history) {
         write(chunk);
@@ -132,7 +132,7 @@ function TerminalPage() {
           onSearchReady={handleSearchReady}
           onBell={handleBell}
         />
-        {/* 검색 바 */}
+        {/* Search bar */}
         {searchOpen && (
           <TerminalSearchBar
             onSearch={handleSearch}
@@ -141,7 +141,7 @@ function TerminalPage() {
             onClose={closeSearch}
           />
         )}
-        {/* 모바일 검색 토글 버튼 */}
+        {/* Mobile search toggle button */}
         {isMobile && !searchOpen && (
           <button
             onClick={() => setSearchOpen(true)}
@@ -151,7 +151,7 @@ function TerminalPage() {
             <Search size={14} />
           </button>
         )}
-        {/* 세션 종료 시 오버레이 */}
+        {/* Overlay when session has exited */}
         {session.exited && (
           <div className="absolute inset-0 flex items-end justify-center bg-black/40 pb-20">
             <Link

@@ -10,11 +10,11 @@ export interface SocketContextValue {
   send: (msg: ClientMessage) => void;
   status: "connected" | "disconnected" | "reconnecting";
   config: { defaultCwd: string; defaultCommand: string };
-  /** 세션 생성 후 콜백 등록 (created 메시지 수신 시 호출) */
+  /** Register callback after session creation (called when 'created' message is received) */
   onceCreated: (cb: (sessionId: string) => void) => void;
-  /** 터미널 output 리스너 등록/해제 */
+  /** Register/unregister terminal output listener */
   addOutputListener: (cb: (sessionId: string, data: string) => void) => () => void;
-  /** 세션의 누적 출력 기록 조회 (터미널 재마운트 시 복원용) */
+  /** Get accumulated output history for a session (for restoring on terminal remount) */
   getSessionOutput: (sessionId: string) => string[];
 }
 
@@ -31,7 +31,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState({ defaultCwd: "", defaultCommand: "" });
   const createdCallbackRef = useRef<((sessionId: string) => void) | null>(null);
   const outputListenersRef = useRef<Set<(sessionId: string, data: string) => void>>(new Set());
-  // 세션별 출력 기록 누적 (라우트 이동 후 터미널 재마운트 시 복원용)
+  // Accumulate per-session output history (for restoring terminal after route navigation)
   const sessionOutputRef = useRef<Map<string, string[]>>(new Map());
   const sessionOutputSizeRef = useRef<Map<string, number>>(new Map());
   const SESSION_OUTPUT_LIMIT = 200_000;
@@ -47,7 +47,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     switch (msg.type) {
       case "sessions":
         setSessions(msg.sessions);
-        // 재연결 시 서버가 스크롤백을 다시 전송하므로 클라이언트 버퍼 초기화
+        // Clear client buffer on reconnect since server resends scrollback
         sessionOutputRef.current.clear();
         sessionOutputSizeRef.current.clear();
         break;
@@ -59,7 +59,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         }
         break;
       case "output": {
-        // 세션별 출력 기록 누적
+        // Accumulate per-session output history
         let chunks = sessionOutputRef.current.get(msg.sessionId);
         if (!chunks) {
           chunks = [];
@@ -71,7 +71,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
           size -= chunks.shift()!.length;
         }
         sessionOutputSizeRef.current.set(msg.sessionId, size);
-        // 리스너에 전달
+        // Dispatch to listeners
         for (const listener of outputListenersRef.current) {
           listener(msg.sessionId, msg.data);
         }
@@ -81,7 +81,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         setSessions((prev) =>
           prev.map((s) => (s.id === msg.sessionId ? { ...s, exited: true } : s)),
         );
-        // 터미널에 "[Session ended]" 표시
+        // Display "[Session ended]" in the terminal
         for (const listener of outputListenersRef.current) {
           listener(msg.sessionId, "\r\n\x1b[90m[Session ended]\x1b[0m\r\n");
         }
@@ -97,7 +97,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         );
         break;
       case "error":
-        // 세션 생성 실패 시 콜백 정리
+        // Clean up callback on session creation failure
         if (createdCallbackRef.current) {
           createdCallbackRef.current = null;
         }

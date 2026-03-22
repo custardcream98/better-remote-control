@@ -48,7 +48,7 @@ const enterKey = cn(
   "shadow-[0_1px_2px_rgba(0,0,0,0.4),0_0_8px_rgba(233,69,96,0.2)]",
 );
 
-// Shift + 화살표: ;2 modifier 추가, Shift + Tab: back-tab
+// Shift + Arrow: add ;2 modifier, Shift + Tab: back-tab
 const shiftArrowMap: Record<string, string> = {
   "\x1b[A": "\x1b[1;2A",
   "\x1b[B": "\x1b[1;2B",
@@ -141,7 +141,7 @@ export function QuickKeys({
 
   return (
     <div className="shrink-0 border-t border-[#1a1f38]/50 bg-[#0c0e1a] px-[10px] pb-[max(10px,env(safe-area-inset-bottom))] pt-[10px]">
-      {/* 1행: Ctrl Alt Shift Tab Esc Enter */}
+      {/* Row 1: Ctrl Alt Shift Tab Esc Enter */}
       <div className="flex gap-[6px]">
         <button className={cn(key, stickyCtrl && modKeyActive)} onClick={onToggleCtrl}>
           Ctrl
@@ -164,7 +164,7 @@ export function QuickKeys({
         </button>
       </div>
 
-      {/* 2행: ← ↓ ↑ → Opt↵ — 5개 (1행과 동일 비율) */}
+      {/* Row 2: Left Down Up Right Opt+Enter — 5 keys (same ratio as row 1) */}
       <div className="mt-[8px] flex gap-[6px]">
         <button className={key} onClick={() => sendKey("\x1b[D")} {...rp("\x1b[D")}>
           <ChevronLeft size={16} />
@@ -183,7 +183,7 @@ export function QuickKeys({
         </button>
       </div>
 
-      {/* 3행: 심볼 + 업로드 — 6개 (가로 여유 있음) */}
+      {/* Row 3: Symbols + Upload — 6 keys (plenty of horizontal space) */}
       <div className="mt-[8px] flex gap-[6px]">
         {["|", "/", "~", "$", "_"].map((c) => (
           <button key={c} className={cn(key, "text-xs")} onClick={() => sendKey(c)}>

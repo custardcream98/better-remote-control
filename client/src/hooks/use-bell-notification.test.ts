@@ -8,13 +8,13 @@ describe("useBellNotification", () => {
 
   beforeEach(() => {
     localStorage.clear();
-    // Notification API 모킹
+    // Mock Notification API
     Object.defineProperty(window, "Notification", {
       value: { permission: "granted" },
       writable: true,
       configurable: true,
     });
-    // Service Worker 모킹
+    // Mock Service Worker
     Object.defineProperty(navigator, "serviceWorker", {
       value: {
         ready: Promise.resolve({
@@ -31,14 +31,14 @@ describe("useBellNotification", () => {
     mockPostMessage.mockClear();
   });
 
-  it("설정 비활성화 시 알림 안 보냄", async () => {
+  it("does not send notification when setting is disabled", async () => {
     localStorage.setItem("brc_bell_notification", "false");
     const { result } = renderHook(() => useBellNotification());
     await result.current.notify("test-session");
     expect(mockPostMessage).not.toHaveBeenCalled();
   });
 
-  it("권한 없으면 알림 안 보냄", async () => {
+  it("does not send notification without permission", async () => {
     localStorage.setItem("brc_bell_notification", "true");
     Object.defineProperty(window, "Notification", {
       value: { permission: "denied" },
@@ -50,7 +50,7 @@ describe("useBellNotification", () => {
     expect(mockPostMessage).not.toHaveBeenCalled();
   });
 
-  it("포그라운드에서는 알림 안 보냄", async () => {
+  it("does not send notification when in foreground", async () => {
     localStorage.setItem("brc_bell_notification", "true");
     Object.defineProperty(document, "visibilityState", {
       value: "visible",
@@ -62,7 +62,7 @@ describe("useBellNotification", () => {
     expect(mockPostMessage).not.toHaveBeenCalled();
   });
 
-  it("백그라운드 + 설정 활성 + 권한 있으면 알림 보냄", async () => {
+  it("sends notification when in background with setting enabled and permission granted", async () => {
     localStorage.setItem("brc_bell_notification", "true");
     Object.defineProperty(document, "visibilityState", {
       value: "hidden",
@@ -78,7 +78,7 @@ describe("useBellNotification", () => {
     });
   });
 
-  it("세션 이름 없으면 기본 메시지", async () => {
+  it("uses default message when no session name is provided", async () => {
     localStorage.setItem("brc_bell_notification", "true");
     Object.defineProperty(document, "visibilityState", {
       value: "hidden",

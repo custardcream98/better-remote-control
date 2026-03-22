@@ -11,7 +11,7 @@ export function BreadcrumbNav({ path, onNavigate }: BreadcrumbNavProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
 
-  // 마지막 세그먼트가 보이도록 자동 스크롤
+  // Auto-scroll to make the last segment visible
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;

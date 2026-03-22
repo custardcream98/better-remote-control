@@ -1,7 +1,7 @@
 /**
- * README 스크린샷용 쇼케이스 스토리
+ * Showcase stories for README screenshots
  *
- * 실제 사용 시나리오를 시뮬레이션하여 더 현실적인 스크린샷을 제공합니다.
+ * Simulates real usage scenarios to provide more realistic screenshots.
  */
 import { Plus, Terminal } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -28,7 +28,7 @@ type Story = StoryObj;
 const noop = () => {};
 const noopSend = (() => {}) as (msg: ClientMessage) => void;
 
-/* ─── 모의 터미널 출력 ─── */
+/* ─── Mock Terminal Output ─── */
 
 const claudeOutput = [
   { type: "prompt" as const, text: "$ claude" },
@@ -85,7 +85,7 @@ function MockTerminalLine({ line }: { line: (typeof claudeOutput)[number] }) {
   );
 }
 
-/* ─── 터미널 + 퀵키 전체 화면 ─── */
+/* ─── Terminal + QuickKeys Full Screen ─── */
 
 export const TerminalWithClaude: Story = {
   render: () => (
@@ -135,7 +135,7 @@ export const TerminalWithClaude: Story = {
   ),
 };
 
-/* ─── 멀티 세션 홈 ─── */
+/* ─── Multi-Session Home ─── */
 
 const realisticSessions: SessionInfo[] = [
   { id: "s1", name: "claude-code", cwd: "~/my-project" },
@@ -177,7 +177,7 @@ function MultiSessionHome({ sessions }: { sessions: SessionInfo[] }) {
   );
 }
 
-/* ─── 빈 상태 (처음 접속) ─── */
+/* ─── Empty State (First Visit) ─── */
 
 export const EmptyState: Story = {
   render: () => (

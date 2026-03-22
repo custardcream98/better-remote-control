@@ -22,19 +22,19 @@ describe("useIsMobile", () => {
     vi.restoreAllMocks();
   });
 
-  it("터치 기기면 true 반환", () => {
+  it("returns true on touch devices", () => {
     mockMatchMedia(true);
     const { result } = renderHook(() => useIsMobile());
     expect(result.current).toBe(true);
   });
 
-  it("데스크톱이면 false 반환", () => {
+  it("returns false on desktop", () => {
     mockMatchMedia(false);
     const { result } = renderHook(() => useIsMobile());
     expect(result.current).toBe(false);
   });
 
-  it("미디어 쿼리 변경 시 값 업데이트", () => {
+  it("updates value when media query changes", () => {
     const { listeners } = mockMatchMedia(false);
     const { result } = renderHook(() => useIsMobile());
     expect(result.current).toBe(false);

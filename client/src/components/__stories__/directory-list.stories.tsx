@@ -22,7 +22,7 @@ export default meta;
 
 type Story = StoryObj<typeof DirectoryList>;
 
-/* ─── 모의 데이터 ─── */
+/* ─── Mock Data ─── */
 
 const sampleDirs = [
   { name: "src" },
@@ -37,9 +37,9 @@ const sampleDirs = [
 
 const noop = () => {};
 
-/* ─── 스토리 ─── */
+/* ─── Stories ─── */
 
-/** 기본 디렉토리 목록 (숨김 디렉토리 자동 필터링) */
+/** Default directory list (hidden directories auto-filtered) */
 export const Default: Story = {
   args: {
     dirs: sampleDirs,
@@ -52,7 +52,7 @@ export const Default: Story = {
   },
 };
 
-/** 로딩 상태 (스켈레톤 UI) */
+/** Loading state (skeleton UI) */
 export const Loading: Story = {
   args: {
     dirs: [],
@@ -65,7 +65,7 @@ export const Loading: Story = {
   },
 };
 
-/** 에러 상태 */
+/** Error state */
 export const Error: Story = {
   args: {
     dirs: [],
@@ -78,7 +78,7 @@ export const Error: Story = {
   },
 };
 
-/** 빈 디렉토리 (하위 폴더 없음) */
+/** Empty directory (no subdirectories) */
 export const Empty: Story = {
   args: {
     dirs: [],
@@ -91,7 +91,7 @@ export const Empty: Story = {
   },
 };
 
-/** 루트 경로 (상위 이동 버튼 숨김) */
+/** Root path (go-up button hidden) */
 export const RootLevel: Story = {
   args: {
     dirs: sampleDirs.filter((d) => !d.name.startsWith(".")),
@@ -104,7 +104,7 @@ export const RootLevel: Story = {
   },
 };
 
-/** 숨김 디렉토리만 있는 경우 (모두 필터링됨) */
+/** Only hidden directories (all filtered out) */
 export const OnlyHidden: Story = {
   args: {
     dirs: [{ name: ".git" }, { name: ".vscode" }, { name: ".cache" }],

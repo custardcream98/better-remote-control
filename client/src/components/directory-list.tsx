@@ -45,7 +45,7 @@ export function DirectoryList({
     );
   }
 
-  // 숨김 디렉토리 필터링
+  // Filter out hidden directories
   const visibleDirs = dirs.filter((d) => !d.name.startsWith("."));
 
   return (

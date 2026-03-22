@@ -17,7 +17,7 @@ export default meta;
 
 type Story = StoryObj<typeof BreadcrumbNav>;
 
-/* ─── 인터랙티브 래퍼 (경로 클릭 시 이동) ─── */
+/* ─── Interactive Wrapper (navigates on path click) ─── */
 
 function BreadcrumbNavWithState({ initialPath }: { initialPath: string }) {
   const [path, setPath] = useState(initialPath);
@@ -25,31 +25,31 @@ function BreadcrumbNavWithState({ initialPath }: { initialPath: string }) {
   return (
     <div style={{ background: "#1a1a2e" }}>
       <BreadcrumbNav path={path} onNavigate={setPath} />
-      <p style={{ color: "#888", fontSize: 12, padding: "8px 16px" }}>현재 경로: {path}</p>
+      <p style={{ color: "#888", fontSize: 12, padding: "8px 16px" }}>Current path: {path}</p>
     </div>
   );
 }
 
-/* ─── 스토리 ─── */
+/* ─── Stories ─── */
 
-/** 루트 경로 */
+/** Root path */
 export const Root: Story = {
   render: () => <BreadcrumbNavWithState initialPath="/" />,
 };
 
-/** 짧은 경로 */
+/** Short path */
 export const ShortPath: Story = {
   render: () => <BreadcrumbNavWithState initialPath="/home/user" />,
 };
 
-/** 깊은 경로 (가로 스크롤 테스트) */
+/** Deep path (horizontal scroll test) */
 export const DeepPath: Story = {
   render: () => (
     <BreadcrumbNavWithState initialPath="/home/user/projects/better-remote-control/client/src/components" />
   ),
 };
 
-/** 정적 (이벤트 로그만 출력) */
+/** Static (only logs events) */
 export const Static: Story = {
   args: {
     path: "/home/user/project",

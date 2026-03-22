@@ -12,7 +12,7 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>,
 );
 
-// Service Worker 등록 (PWA 알림용)
+// Register Service Worker (for PWA notifications)
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/sw.js").catch(() => {});
 }

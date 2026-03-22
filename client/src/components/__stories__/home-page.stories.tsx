@@ -1,8 +1,8 @@
 /**
- * HomePage 복합 스토리
+ * HomePage composite stories
  *
- * 실제 라우트 모듈(routes/index.tsx)은 Route.useSearch 등 파일 기반 라우트 훅에
- * 의존하므로, 여기서는 페이지를 구성하는 컴포넌트들을 조합해 시각적으로 동일하게 렌더합니다.
+ * Since the actual route module (routes/index.tsx) depends on file-based route hooks
+ * like Route.useSearch, we compose the page components here to render visually identical output.
  */
 import { Plus, Terminal } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -25,7 +25,7 @@ export default meta;
 
 type Story = StoryObj;
 
-/* ─── 페이지 레이아웃 재현 ─── */
+/* ─── Page Layout Reproduction ─── */
 
 function HomePageLayout({
   sessions,
@@ -40,7 +40,7 @@ function HomePageLayout({
       <div style={{ flex: 1, overflowY: "auto" }}>
         <div style={{ maxWidth: 512, margin: "0 auto", padding: 16 }}>
           {sessions.length === 0 ? (
-            /* 빈 상태 화면 */
+            /* Empty state screen */
             <div
               style={{
                 display: "flex",
@@ -63,7 +63,7 @@ function HomePageLayout({
               </p>
             </div>
           ) : (
-            /* 세션 목록 */
+            /* Session list */
             <div style={{ display: "grid", gap: 12 }}>
               {sessions.map((s) => (
                 <SessionCard key={s.id} session={s} onClose={onClose} />
@@ -73,7 +73,7 @@ function HomePageLayout({
         </div>
       </div>
 
-      {/* 하단 고정 버튼 */}
+      {/* Bottom fixed button */}
       <div className="border-t border-[var(--border)] bg-[var(--background)] p-4">
         <button
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity active:opacity-80"
@@ -87,9 +87,9 @@ function HomePageLayout({
   );
 }
 
-/* ─── 스토리 ─── */
+/* ─── Stories ─── */
 
-/** 세션이 있는 기본 상태 */
+/** Default state with sessions */
 export const WithSessions: Story = {
   render: () => (
     <StoryProviders>
@@ -98,7 +98,7 @@ export const WithSessions: Story = {
   ),
 };
 
-/** 세션 없음 (빈 상태 화면) */
+/** No sessions (empty state screen) */
 export const Empty: Story = {
   render: () => (
     <StoryProviders socketOverrides={{ sessions: [] }}>
@@ -107,7 +107,7 @@ export const Empty: Story = {
   ),
 };
 
-/** 많은 세션 (스크롤 테스트) */
+/** Many sessions (scroll test) */
 export const ManySessions: Story = {
   render: () => {
     const manySessions: SessionInfo[] = Array.from({ length: 12 }, (_, i) => ({

@@ -7,7 +7,7 @@ export function useBellNotification() {
     if (!isBellNotificationEnabled()) return;
     if (!("Notification" in window)) return;
     if (Notification.permission !== "granted") return;
-    // 포그라운드에서는 알림 불필요
+    // No notification needed when in foreground
     if (document.visibilityState === "visible") return;
 
     const reg = await navigator.serviceWorker?.ready;

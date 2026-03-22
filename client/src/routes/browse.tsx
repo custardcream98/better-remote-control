@@ -77,7 +77,7 @@ function BrowsePage() {
       setCreating(false);
       navigate({ to: "/terminal/$sessionId", params: { sessionId } });
     });
-    // 타임아웃: 5초 내 응답 없으면 복원 + 에러 표시
+    // Timeout: restore state and show error if no response within 5 seconds
     timeoutRef.current = setTimeout(() => {
       timeoutRef.current = null;
       setCreating(false);
@@ -101,7 +101,7 @@ function BrowsePage() {
         />
       </div>
 
-      {/* 하단 고정 "여기서 터미널 열기" 버튼 */}
+      {/* Bottom-pinned "Open terminal here" button */}
       <div className="shrink-0 border-t border-[var(--border)] bg-[var(--background)] p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <button
           onClick={handleOpenTerminal}

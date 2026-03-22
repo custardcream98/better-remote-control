@@ -1,8 +1,8 @@
 /**
- * 스토리북용 모의 프로바이더 모음
- * - MockSocketProvider: SocketContext 모킹
- * - MockRouterProvider: TanStack Router 모킹
- * - StoryProviders: 위 두 프로바이더를 결합
+ * Mock provider collection for Storybook
+ * - MockSocketProvider: SocketContext mock
+ * - MockRouterProvider: TanStack Router mock
+ * - StoryProviders: Combines the two providers above
  */
 import {
   createMemoryHistory,
@@ -19,7 +19,7 @@ import type { SocketContextValue } from "@/contexts/socket-context";
 import type { SessionInfo, ClientMessage } from "@/hooks/use-socket";
 import type { ReactNode } from "react";
 
-/* ─── 기본 모의 값 ─── */
+/* ─── Default Mock Values ─── */
 
 export const mockSessions: SessionInfo[] = [
   { id: "sess-1", name: "dev-server", cwd: "/home/user/project" },
@@ -33,7 +33,7 @@ const defaultSocketValue: SocketContextValue = {
   status: "connected",
   config: { defaultCwd: "/home/user/project", defaultCommand: "bash" },
   onceCreated: (cb) => {
-    // 스토리에서 세션 생성 시뮬레이션: 1초 후 콜백
+    // Simulate session creation in story: callback after 1 second
     setTimeout(() => cb("mock-new-session"), 1000);
   },
   addOutputListener: () => () => {},
@@ -44,7 +44,7 @@ const defaultSocketValue: SocketContextValue = {
 
 interface MockSocketProviderProps {
   children: ReactNode;
-  /** SocketContextValue를 부분적으로 오버라이드 */
+  /** Partially override SocketContextValue */
   overrides?: Partial<SocketContextValue>;
 }
 
@@ -56,26 +56,26 @@ export function MockSocketProvider({ children, overrides }: MockSocketProviderPr
 /* ─── MockRouterProvider ─── */
 
 interface MockRouterProviderProps {
-  /** 초기 URL 경로 */
+  /** Initial URL path */
   initialPath?: string;
-  /** 렌더할 컴포넌트 (Outlet 대신 사용) */
+  /** Component to render (used instead of Outlet) */
   children: ReactNode;
 }
 
 export function MockRouterProvider({ initialPath = "/", children }: MockRouterProviderProps) {
-  // 자식 컴포넌트를 렌더할 루트 라우트 생성
+  // Create root route that renders child components
   const rootRoute = createRootRoute({
     component: () => <Outlet />,
   });
 
-  // 모든 경로를 캐치하는 인덱스 라우트
+  // Index route that catches all paths
   const indexRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/",
     component: () => <>{children}</>,
   });
 
-  // /browse 라우트 (search params 지원)
+  // /browse route (with search params support)
   const browseRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/browse",
@@ -85,7 +85,7 @@ export function MockRouterProvider({ initialPath = "/", children }: MockRouterPr
     }),
   });
 
-  // /terminal/$sessionId 라우트
+  // /terminal/$sessionId route
   const terminalRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/terminal/$sessionId",
@@ -103,7 +103,7 @@ export function MockRouterProvider({ initialPath = "/", children }: MockRouterPr
   return <RouterProvider router={router as any} />;
 }
 
-/* ─── StoryProviders (결합) ─── */
+/* ─── StoryProviders (Combined) ─── */
 
 interface StoryProvidersProps {
   children: ReactNode;
@@ -112,10 +112,10 @@ interface StoryProvidersProps {
 }
 
 /**
- * SocketProvider + RouterProvider를 결합한 스토리북용 래퍼
+ * Storybook wrapper combining SocketProvider + RouterProvider
  *
- * 주의: RouterProvider가 자체적으로 children을 렌더하므로,
- * 이 컴포넌트에서는 RouterProvider 내부에 children을 배치합니다.
+ * Note: Since RouterProvider renders children on its own,
+ * this component places children inside RouterProvider.
  */
 export function StoryProviders({
   children,

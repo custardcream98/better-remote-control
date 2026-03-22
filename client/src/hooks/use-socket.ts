@@ -26,12 +26,12 @@ export function useSocket(onMessage: (msg: ServerMessage) => void) {
   const reconnectDelay = useRef(1000);
   const onMessageRef = useRef(onMessage);
 
-  // onMessage 최신 참조 유지
+  // Keep latest onMessage reference
   useEffect(() => {
     onMessageRef.current = onMessage;
   });
 
-  // reconnectCount 변화로 재연결 트리거 (자기 참조 없이 재귀 회피)
+  // Trigger reconnect via reconnectCount changes (avoid self-referencing recursion)
   const [reconnectCount, setReconnectCount] = useState(0);
 
   useEffect(() => {

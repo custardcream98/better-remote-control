@@ -1,9 +1,9 @@
 /**
- * BrowsePage 복합 스토리
+ * BrowsePage composite stories
  *
- * 실제 라우트 모듈(routes/browse.tsx)은 Route.useSearch, useNavigate 등
- * 파일 기반 라우트 훅에 의존하므로, 여기서는 BreadcrumbNav + DirectoryList를
- * 조합해 페이지 레이아웃을 시각적으로 재현합니다.
+ * Since the actual route module (routes/browse.tsx) depends on file-based route hooks
+ * like Route.useSearch and useNavigate, we compose BreadcrumbNav + DirectoryList here
+ * to visually reproduce the page layout.
  */
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -26,7 +26,7 @@ export default meta;
 
 type Story = StoryObj;
 
-/* ─── 모의 데이터 ─── */
+/* ─── Mock Data ─── */
 
 const sampleDirs = [
   { name: "src" },
@@ -38,7 +38,7 @@ const sampleDirs = [
   { name: ".git" },
 ];
 
-/* ─── 페이지 레이아웃 재현 ─── */
+/* ─── Page Layout Reproduction ─── */
 
 function BrowsePageLayout({
   initialPath = "/home/user/project",
@@ -87,7 +87,7 @@ function BrowsePageLayout({
         />
       </div>
 
-      {/* 하단 고정 버튼 */}
+      {/* Bottom fixed button */}
       <div className="border-t border-[var(--border)] bg-[var(--background)] p-4">
         <button
           onClick={handleOpenTerminal}
@@ -101,9 +101,9 @@ function BrowsePageLayout({
   );
 }
 
-/* ─── 스토리 ─── */
+/* ─── Stories ─── */
 
-/** 기본 디렉토리 탐색 상태 */
+/** Default directory browsing state */
 export const Default: Story = {
   render: () => (
     <StoryProviders>
@@ -112,7 +112,7 @@ export const Default: Story = {
   ),
 };
 
-/** 로딩 중 상태 */
+/** Loading state */
 export const Loading: Story = {
   render: () => (
     <StoryProviders>
@@ -121,7 +121,7 @@ export const Loading: Story = {
   ),
 };
 
-/** 에러 상태 */
+/** Error state */
 export const Error: Story = {
   render: () => (
     <StoryProviders>
@@ -130,7 +130,7 @@ export const Error: Story = {
   ),
 };
 
-/** 빈 디렉토리 */
+/** Empty directory */
 export const EmptyDirectory: Story = {
   render: () => (
     <StoryProviders>
@@ -139,7 +139,7 @@ export const EmptyDirectory: Story = {
   ),
 };
 
-/** 루트 경로에서 시작 */
+/** Starting from root path */
 export const RootPath: Story = {
   render: () => (
     <StoryProviders>
@@ -148,7 +148,7 @@ export const RootPath: Story = {
   ),
 };
 
-/** 깊은 경로 */
+/** Deep path */
 export const DeepPath: Story = {
   render: () => (
     <StoryProviders>

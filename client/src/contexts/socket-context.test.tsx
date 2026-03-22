@@ -4,7 +4,7 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 
 import { SocketProvider, useSessionContext } from "./socket-context";
 
-// useSocket 모킹 — handleMessage를 캡처
+// Mock useSocket — capture handleMessage
 let capturedHandleMessage: ((msg: Record<string, unknown>) => void) | null = null;
 
 vi.mock("@/hooks/use-socket", () => ({
@@ -14,7 +14,7 @@ vi.mock("@/hooks/use-socket", () => ({
   },
 }));
 
-// fetch 모킹 (config 로드)
+// Mock fetch (config loading)
 vi.stubGlobal(
   "fetch",
   vi.fn(() =>
@@ -26,12 +26,12 @@ function wrapper({ children }: { children: ReactNode }) {
   return <SocketProvider>{children}</SocketProvider>;
 }
 
-describe("SocketProvider 세션 출력 버퍼", () => {
+describe("SocketProvider session output buffer", () => {
   beforeEach(() => {
     capturedHandleMessage = null;
   });
 
-  it("세션별 출력 누적 및 조회", () => {
+  it("accumulates and retrieves output per session", () => {
     const { result } = renderHook(() => useSessionContext(), { wrapper });
 
     act(() => {
@@ -45,7 +45,7 @@ describe("SocketProvider 세션 출력 버퍼", () => {
     expect(result.current.getSessionOutput("s3")).toEqual([]);
   });
 
-  it("세션 닫히면 버퍼 삭제", () => {
+  it("clears buffer when session is closed", () => {
     const { result } = renderHook(() => useSessionContext(), { wrapper });
 
     act(() => {
@@ -65,7 +65,7 @@ describe("SocketProvider 세션 출력 버퍼", () => {
     expect(result.current.getSessionOutput("s1")).toEqual([]);
   });
 
-  it("sessions 메시지 수신 시 버퍼 초기화 (재연결 대비)", () => {
+  it("resets buffer on sessions message (handles reconnection)", () => {
     const { result } = renderHook(() => useSessionContext(), { wrapper });
 
     act(() => {
@@ -81,7 +81,7 @@ describe("SocketProvider 세션 출력 버퍼", () => {
     expect(result.current.getSessionOutput("s1")).toEqual([]);
   });
 
-  it("출력 리스너에 데이터 전달", () => {
+  it("delivers data to output listeners", () => {
     const { result } = renderHook(() => useSessionContext(), { wrapper });
     const received: string[] = [];
 
@@ -100,7 +100,7 @@ describe("SocketProvider 세션 출력 버퍼", () => {
     expect(received).toEqual(["chunk1", "chunk2"]);
   });
 
-  it("리스너 해제 후 데이터 안 받음", () => {
+  it("stops receiving data after listener is removed", () => {
     const { result } = renderHook(() => useSessionContext(), { wrapper });
     const received: string[] = [];
     let unsubscribe: () => void;

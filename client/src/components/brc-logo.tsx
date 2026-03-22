@@ -5,15 +5,15 @@ interface BrcLogoProps {
 }
 
 /**
- * brc 인라인 로고 — 아이콘 마크 + 워드마크
+ * brc inline logo — icon mark + wordmark
  *
- * 아이콘: 둥근 사각형 안에 터미널 프롬프트 ›_
- * 텍스트: "brc" 모노스페이스 워드마크
+ * Icon: terminal prompt >_ inside a rounded rectangle
+ * Text: "brc" monospace wordmark
  */
 export function BrcLogo({ className }: BrcLogoProps) {
   return (
     <span className={cn("inline-flex items-center gap-1.5", className)}>
-      {/* 아이콘 마크 */}
+      {/* Icon mark */}
       <svg
         viewBox="0 0 20 20"
         fill="none"
@@ -31,7 +31,7 @@ export function BrcLogo({ className }: BrcLogoProps) {
           stroke="#e94560"
           strokeOpacity="0.25"
         />
-        {/* > 쉐브론 */}
+        {/* > chevron */}
         <path
           d="M5.5 6.5L9.5 10L5.5 13.5"
           stroke="#e94560"
@@ -39,7 +39,7 @@ export function BrcLogo({ className }: BrcLogoProps) {
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        {/* _ 커서 */}
+        {/* _ cursor */}
         <line
           x1="11"
           y1="13.5"
@@ -52,7 +52,7 @@ export function BrcLogo({ className }: BrcLogoProps) {
         />
       </svg>
 
-      {/* 워드마크 */}
+      {/* Wordmark */}
       <span className="font-mono text-[13px] font-bold leading-none tracking-tight">
         <span className="text-[var(--foreground)]">brc</span>
       </span>

@@ -30,11 +30,11 @@ interface TerminalPaneProps {
   stickyAlt: boolean;
   stickyShift: boolean;
   onStickyReset: () => void;
-  /** 외부에서 데이터를 write하기 위한 콜백 등록 */
+  /** Register callback for writing data from outside */
   onReady: (write: (data: string) => void) => void;
-  /** 검색 핸들 등록 */
+  /** Register search handle */
   onSearchReady?: (handle: TerminalSearchHandle) => void;
-  /** 터미널 벨 발생 시 콜백 */
+  /** Callback when terminal bell occurs */
   onBell?: () => void;
 }
 
@@ -60,7 +60,7 @@ export function TerminalPane({
   const onBellRef = useRef(onBell);
   const fontSizeRef = useRef(fontSize);
 
-  // 최신 prop 값을 ref에 동기화 (이벤트 핸들러에서 stale closure 방지)
+  // Sync latest prop values to refs (prevent stale closures in event handlers)
   useEffect(() => {
     stickyRef.current = { ctrl: stickyCtrl, alt: stickyAlt, shift: stickyShift };
     sendRef.current = send;
@@ -70,7 +70,7 @@ export function TerminalPane({
     fontSizeRef.current = fontSize;
   });
 
-  // 터미널 초기화
+  // Initialize terminal
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -99,7 +99,7 @@ export function TerminalPane({
     termRef.current = term;
     fitRef.current = fit;
 
-    // write 함수를 외부에 전달
+    // Expose write function to the outside
     onReady((data: string) => {
       const buf = term.buffer.active;
       const wasScrolledUp = buf.viewportY < buf.baseY;
@@ -109,14 +109,14 @@ export function TerminalPane({
       });
     });
 
-    // 검색 핸들 전달
+    // Expose search handle
     onSearchReady?.({
       findNext: (q) => search.findNext(q),
       findPrevious: (q) => search.findPrevious(q),
       clearSearch: () => search.clearDecorations(),
     });
 
-    // 벨 이벤트
+    // Bell event
     term.onBell(() => onBellRef.current?.());
 
     term.onData((data) => {
@@ -136,7 +136,7 @@ export function TerminalPane({
       sendRef.current({ type: "input", sessionId: sessionIdRef.current, data: modified });
     });
 
-    // 터치 스크롤
+    // Touch scroll
     const container = containerRef.current;
     let touchStartY = 0;
     const onTouchStart = (e: TouchEvent) => {
@@ -162,7 +162,7 @@ export function TerminalPane({
     });
     ro.observe(container);
 
-    // 초기 focus
+    // Initial focus
     term.focus();
 
     return () => {
@@ -175,7 +175,7 @@ export function TerminalPane({
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // 폰트 크기 동적 반영
+  // Dynamically apply font size changes
   useEffect(() => {
     if (termRef.current && fitRef.current) {
       termRef.current.options.fontSize = fontSize;

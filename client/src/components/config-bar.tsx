@@ -32,7 +32,7 @@ export function ConfigBar() {
       </div>
 
       <div className="flex items-center gap-2">
-        {/* 연결 상태 인디케이터 */}
+        {/* Connection status indicator */}
         <div
           className={cn(
             "h-2 w-2 rounded-full transition-colors",

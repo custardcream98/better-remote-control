@@ -13,7 +13,7 @@ function HomePage() {
   const { sessions, send } = useSessionContext();
   const { t } = useTranslation();
 
-  // 세션 종료 메시지 전송
+  // Send session close message
   function handleClose(id: string) {
     send({ type: "close", sessionId: id });
   }
@@ -22,7 +22,7 @@ function HomePage() {
     <div className="flex flex-1 flex-col overflow-y-auto">
       <div className="mx-auto flex w-full max-w-lg flex-1 flex-col p-4">
         {sessions.length === 0 ? (
-          // 세션 없을 때 빈 상태 화면
+          // Empty state screen when there are no sessions
           <div className="flex flex-1 flex-col items-center justify-center text-center">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--muted)]">
               <Terminal size={28} className="text-[var(--muted-foreground)]" />
@@ -35,7 +35,7 @@ function HomePage() {
             </p>
           </div>
         ) : (
-          // 세션 목록 카드 그리드
+          // Session list card grid
           <div className="grid gap-3">
             {sessions.map((s) => (
               <SessionCard key={s.id} session={s} onClose={handleClose} />
@@ -44,7 +44,7 @@ function HomePage() {
         )}
       </div>
 
-      {/* 하단 고정 새 세션 버튼 */}
+      {/* Bottom-pinned new session button */}
       <div className="shrink-0 border-t border-[var(--border)] bg-[var(--background)] p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <Link
           to="/browse"

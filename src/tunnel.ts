@@ -2,7 +2,7 @@ import { spawn, execSync } from "node:child_process";
 
 import type { ChildProcess } from "node:child_process";
 
-/** cloudflared 설치 여부 확인 */
+/** Check if cloudflared is installed */
 export function isCloudflaredInstalled(): boolean {
   try {
     execSync("which cloudflared", { stdio: "ignore" });
@@ -12,7 +12,7 @@ export function isCloudflaredInstalled(): boolean {
   }
 }
 
-/** Cloudflare Quick Tunnel 시작. 생성된 URL을 resolve. */
+/** Start Cloudflare Quick Tunnel. Resolves with the generated URL. */
 export function startTunnel(port: number): Promise<{ url: string; process: ChildProcess }> {
   return new Promise((resolve, reject) => {
     const child = spawn("cloudflared", ["tunnel", "--url", `http://localhost:${port}`], {
@@ -22,12 +22,12 @@ export function startTunnel(port: number): Promise<{ url: string; process: Child
     let resolved = false;
     const timeout = setTimeout(() => {
       if (!resolved) {
-        reject(new Error("Tunnel timed out (30s). cloudflared가 응답하지 않습니다."));
+        reject(new Error("Tunnel timed out (30s). cloudflared is not responding."));
         child.kill();
       }
     }, 30_000);
 
-    // cloudflared는 URL을 stderr로 출력
+    // cloudflared outputs the URL to stderr
     child.stderr?.on("data", (chunk: Buffer) => {
       const text = chunk.toString();
       const match = text.match(/https:\/\/[a-z0-9-]+\.trycloudflare\.com/);
@@ -40,13 +40,13 @@ export function startTunnel(port: number): Promise<{ url: string; process: Child
 
     child.on("error", (err) => {
       clearTimeout(timeout);
-      reject(new Error(`cloudflared 실행 실패: ${err.message}`));
+      reject(new Error(`Failed to run cloudflared: ${err.message}`));
     });
 
     child.on("exit", (code) => {
       if (!resolved) {
         clearTimeout(timeout);
-        reject(new Error(`cloudflared가 종료됨 (code: ${code})`));
+        reject(new Error(`cloudflared exited (code: ${code})`));
       }
     });
   });

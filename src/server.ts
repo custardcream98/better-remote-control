@@ -20,7 +20,7 @@ import type { IPty } from "node-pty";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// 출력 버퍼 크기 (세션 당 최근 출력 보관, 재연결 시 전송)
+// Output buffer size (keeps recent output per session, sent on reconnect)
 const OUTPUT_BUFFER_SIZE = 50_000;
 
 interface Session {
@@ -39,7 +39,7 @@ export interface ServerOptions {
   defaultCommand: string;
 }
 
-/** env에서 undefined 값 제거 */
+/** Remove undefined values from env */
 function cleanEnv(): Record<string, string> {
   const env: Record<string, string> = {};
   for (const [k, v] of Object.entries(process.env)) {
@@ -48,7 +48,7 @@ function cleanEnv(): Record<string, string> {
   return env;
 }
 
-/** WebSocket 메시지 검증 */
+/** Validate WebSocket message */
 function validateMessage(msg: unknown): msg is {
   type: string;
   sessionId?: string;
@@ -72,7 +72,7 @@ function requireSessionId(msg: Record<string, unknown>): string | null {
 export function createServer({ port, password, shell, defaultCwd, defaultCommand }: ServerOptions) {
   const app = express();
 
-  // 이미지 업로드는 body parser보다 먼저 등록 (stream 소비 방지)
+  // Register image upload before body parser (to prevent stream consumption)
   const UPLOAD_DIR = path.join(os.homedir(), ".brc", "uploads");
   const UPLOAD_MAX_AGE_MS = 24 * 60 * 60_000;
   const UPLOAD_MAX_SIZE = 10 * 1024 * 1024;
@@ -87,13 +87,13 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
         if (now - stat.mtimeMs > UPLOAD_MAX_AGE_MS) await fs.unlink(fp);
       }
     } catch {
-      /* 디렉토리 없으면 무시 */
+      /* Ignore if directory doesn't exist */
     }
   }
 
   app.post("/api/upload", async (req, res) => {
     try {
-      // 인증 확인 (body parser 전이라 authMiddleware 사용 불가)
+      // Auth check (can't use authMiddleware since this is before body parser)
       const cookie = req.headers.cookie ?? "";
       if (!verifyWsToken(cookie, password)) {
         res.status(401).json({ error: "unauthorized" });
@@ -102,7 +102,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
 
       const contentType = req.headers["content-type"] ?? "";
       if (!contentType.startsWith("image/")) {
-        res.status(400).json({ error: "이미지 파일만 지원합니다" });
+        res.status(400).json({ error: "Only image files are supported" });
         return;
       }
 
@@ -112,7 +112,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
         size += (chunk as Buffer).length;
         if (size > UPLOAD_MAX_SIZE) {
           req.destroy();
-          res.status(413).json({ error: "10MB 이하 이미지만 업로드 가능합니다" });
+          res.status(413).json({ error: "Image must be 10MB or less" });
           return;
         }
         chunks.push(chunk as Buffer);
@@ -120,7 +120,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
 
       const body = Buffer.concat(chunks);
       if (body.length === 0) {
-        res.status(400).json({ error: "이미지 데이터가 필요합니다" });
+        res.status(400).json({ error: "Image data is required" });
         return;
       }
 
@@ -143,11 +143,11 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
       res.json({ filePath });
     } catch (err) {
       console.error("  Upload error:", (err as Error).message);
-      res.status(500).json({ error: "업로드 실패" });
+      res.status(500).json({ error: "Upload failed" });
     }
   });
 
-  // body parser (upload 이후에 등록)
+  // Body parser (registered after upload route)
   app.use(express.json({ type: "application/json" }));
   app.use(express.urlencoded({ extended: true, type: "application/x-www-form-urlencoded" }));
 
@@ -165,14 +165,14 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
     if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(msg));
   }
 
-  /** 쿠키 문자열 생성 (HTTPS 시 Secure 플래그 추가) */
+  /** Build cookie string (adds Secure flag for HTTPS) */
   function makeCookie(token: string, secure: boolean): string {
     let cookie = `brc_token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400`;
     if (secure) cookie += "; Secure";
     return cookie;
   }
 
-  /** 세션 생성 */
+  /** Create a new terminal session */
   function createSession(cwd?: string, name?: string, command?: string): Session | null {
     const id = crypto.randomUUID();
     const sessionCwd = cwd || defaultCwd;
@@ -188,16 +188,16 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
         env: cleanEnv(),
       });
     } catch (err) {
-      console.error("  PTY 생성 실패:", (err as Error).message);
+      console.error("  Failed to create PTY:", (err as Error).message);
       return null;
     }
 
     const session: Session = { id, name: sessionName, cwd: sessionCwd, pty, outputBuffer: "" };
     sessions.set(id, session);
 
-    // PTY 출력 → 버퍼 + 브로드캐스트
+    // PTY output -> buffer + broadcast
     pty.onData((data) => {
-      // 출력 버퍼 갱신 (최근 OUTPUT_BUFFER_SIZE 문자만 유지)
+      // Update output buffer (keep only the last OUTPUT_BUFFER_SIZE chars)
       session.outputBuffer += data;
       if (session.outputBuffer.length > OUTPUT_BUFFER_SIZE) {
         session.outputBuffer = session.outputBuffer.slice(-OUTPUT_BUFFER_SIZE);
@@ -211,7 +211,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
       sessions.delete(id);
     });
 
-    // 자동 명령어 실행
+    // Auto-execute command
     const cmd = command ?? defaultCommand;
     if (cmd) {
       setTimeout(() => pty.write(cmd + "\r"), 300);
@@ -220,14 +220,14 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
     return session;
   }
 
-  // CSRF 토큰 저장소
+  // CSRF token store
   const csrfTokens = new Set<string>();
 
-  // 로그인 페이지 (CSRF 토큰 내장)
+  // Login page (with embedded CSRF token)
   app.get("/login", (_req, res) => {
     const csrfToken = crypto.randomBytes(16).toString("hex");
     csrfTokens.add(csrfToken);
-    // 5분 후 만료
+    // Expire after 5 minutes
     setTimeout(() => csrfTokens.delete(csrfToken), 5 * 60_000);
 
     res.send(`<!DOCTYPE html>
@@ -275,7 +275,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
 </body></html>`);
   });
 
-  // 로그인 API (rate limit + CSRF + timing-safe)
+  // Login API (rate limit + CSRF + timing-safe)
   app.post("/api/login", (req, res) => {
     const ip = req.ip ?? req.socket.remoteAddress ?? "unknown";
     if (!checkRateLimit(ip)) {
@@ -285,7 +285,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
 
     const { password: inputPw, csrf } = req.body as { password?: string; csrf?: string };
 
-    // CSRF 검증
+    // CSRF verification
     if (!csrf || !csrfTokens.has(csrf)) {
       res.status(403).json({ error: "invalid request" });
       return;
@@ -302,19 +302,19 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
     }
   });
 
-  // 인증 미들웨어
+  // Auth middleware
   app.use(authMiddleware(password));
 
-  // 설정 API
+  // Config API
   app.get("/api/config", (_req, res) => {
     res.json({ defaultCwd, defaultCommand });
   });
 
-  // 디렉토리 목록 API
+  // Directory listing API
   app.get("/api/dirs", async (req, res) => {
     const dirPath = req.query.path;
 
-    // 유효성 검사
+    // Validation
     if (typeof dirPath !== "string" || !dirPath) {
       res.status(400).json({ error: "path parameter is required" });
       return;
@@ -344,7 +344,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
     }
   });
 
-  // 정적 파일 서빙 (Vite 해시된 에셋에 장기 캐시)
+  // Static file serving (long-term cache for Vite hashed assets)
   app.use(
     "/assets",
     express.static(path.join(__dirname, "..", "public", "assets"), {
@@ -354,18 +354,18 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
   );
   app.use(express.static(path.join(__dirname, "..", "public")));
 
-  // SPA fallback — TanStack Router가 클라이언트에서 라우팅 처리
+  // SPA fallback — TanStack Router handles client-side routing
   app.get("/{*splat}", (req, res, next) => {
     if (req.path.startsWith("/api/") || req.path === "/login") return next();
     res.sendFile(path.join(__dirname, "..", "public", "index.html"));
   });
 
-  // HTTP 서버 시작
+  // Start HTTP server
   const server = app.listen(port, () => {
     console.log(`  Local: http://localhost:${port}`);
   });
 
-  // WebSocket 서버
+  // WebSocket server
   const wss = new WebSocketServer({ server, path: "/ws" });
 
   wss.on("connection", (ws, req) => {
@@ -376,7 +376,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
 
     clients.add(ws);
 
-    // 기존 세션 목록 + 버퍼된 출력 전송 (재연결 복원)
+    // Send existing session list + buffered output (reconnect restore)
     const sessionList = [...sessions.values()].map((s) => ({
       id: s.id,
       name: s.name,
@@ -384,7 +384,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
     }));
     sendTo(ws, { type: "sessions", sessions: sessionList });
 
-    // 각 세션의 버퍼된 출력 전송
+    // Send buffered output for each session
     for (const s of sessions.values()) {
       if (s.outputBuffer) {
         sendTo(ws, { type: "output", sessionId: s.id, data: s.outputBuffer });
@@ -413,7 +413,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
                 cwd: session.cwd,
               });
             } else {
-              sendTo(ws, { type: "error", message: "세션 생성 실패" });
+              sendTo(ws, { type: "error", message: "Failed to create session" });
             }
             break;
           }
@@ -458,7 +458,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
           }
         }
       } catch {
-        // 잘못된 메시지 무시
+        // Ignore malformed messages
       }
     });
 

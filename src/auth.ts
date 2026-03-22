@@ -2,23 +2,23 @@ import crypto from "node:crypto";
 
 import type { Request, Response, NextFunction } from "express";
 
-/** 랜덤 비밀번호 생성 (6자리 영숫자) */
+/** Generate a random password (6-char hex) */
 export function generatePassword(): string {
   return crypto.randomBytes(3).toString("hex");
 }
 
-/** timing-safe 문자열 비교 */
+/** Timing-safe string comparison */
 function safeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
   return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
 }
 
-/** 비밀번호 해시 생성 (쿠키용) */
+/** Hash password (for cookie token) */
 export function hashPassword(password: string): string {
   return crypto.createHash("sha256").update(password).digest("hex");
 }
 
-/** Express 미들웨어: 쿠키 기반 인증 */
+/** Express middleware: cookie-based auth */
 export function authMiddleware(password: string) {
   const TOKEN = hashPassword(password);
 
@@ -39,7 +39,7 @@ export function authMiddleware(password: string) {
   };
 }
 
-/** WebSocket 인증 확인 */
+/** Verify WebSocket auth token */
 export function verifyWsToken(cookie: string | undefined, password: string): boolean {
   if (!cookie) return false;
   const TOKEN = hashPassword(password);
@@ -48,7 +48,7 @@ export function verifyWsToken(cookie: string | undefined, password: string): boo
   return safeEqual(tokenMatch[1], TOKEN);
 }
 
-/** 비밀번호 비교 (timing-safe) */
+/** Compare passwords (timing-safe) */
 export function verifyPassword(input: string, password: string): boolean {
   return safeEqual(hashPassword(input), hashPassword(password));
 }
@@ -56,7 +56,7 @@ export function verifyPassword(input: string, password: string): boolean {
 // Rate limiting
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 const MAX_ATTEMPTS = 5;
-const WINDOW_MS = 60_000; // 1분
+const WINDOW_MS = 60_000; // 1 minute
 
 export function checkRateLimit(ip: string): boolean {
   const now = Date.now();

@@ -14,6 +14,8 @@ export interface SocketContextValue {
   onceCreated: (cb: (sessionId: string) => void) => void;
   /** 터미널 output 리스너 등록/해제 */
   addOutputListener: (cb: (sessionId: string, data: string) => void) => () => void;
+  /** 세션의 누적 출력 기록 조회 (터미널 재마운트 시 복원용) */
+  getSessionOutput: (sessionId: string) => string[];
 }
 
 export const SocketContext = createContext<SocketContextValue | null>(null);
@@ -29,10 +31,10 @@ export function SocketProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState({ defaultCwd: "", defaultCommand: "" });
   const createdCallbackRef = useRef<((sessionId: string) => void) | null>(null);
   const outputListenersRef = useRef<Set<(sessionId: string, data: string) => void>>(new Set());
-  // 리스너 등록 전에 도착한 output 메시지를 버퍼링 (최대 100KB)
-  const outputBufferRef = useRef<{ sessionId: string; data: string }[]>([]);
-  const outputBufferSizeRef = useRef(0);
-  const OUTPUT_BUFFER_LIMIT = 100_000;
+  // 세션별 출력 기록 누적 (라우트 이동 후 터미널 재마운트 시 복원용)
+  const sessionOutputRef = useRef<Map<string, string[]>>(new Map());
+  const sessionOutputSizeRef = useRef<Map<string, number>>(new Map());
+  const SESSION_OUTPUT_LIMIT = 200_000;
 
   useEffect(() => {
     fetch("/api/config")
@@ -45,6 +47,9 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     switch (msg.type) {
       case "sessions":
         setSessions(msg.sessions);
+        // 재연결 시 서버가 스크롤백을 다시 전송하므로 클라이언트 버퍼 초기화
+        sessionOutputRef.current.clear();
+        sessionOutputSizeRef.current.clear();
         break;
       case "created":
         setSessions((prev) => [...prev, { id: msg.sessionId, name: msg.name, cwd: msg.cwd }]);
@@ -53,25 +58,25 @@ export function SocketProvider({ children }: { children: ReactNode }) {
           createdCallbackRef.current = null;
         }
         break;
-      case "output":
-        if (outputListenersRef.current.size > 0) {
-          for (const listener of outputListenersRef.current) {
-            listener(msg.sessionId, msg.data);
-          }
-        } else {
-          // 리스너 없으면 버퍼에 저장 (재연결 시 터미널 마운트 전 도착하는 output 대비)
-          outputBufferRef.current.push({ sessionId: msg.sessionId, data: msg.data });
-          outputBufferSizeRef.current += msg.data.length;
-          // 버퍼 크기 제한 — 오래된 항목부터 제거
-          while (
-            outputBufferSizeRef.current > OUTPUT_BUFFER_LIMIT &&
-            outputBufferRef.current.length > 0
-          ) {
-            const removed = outputBufferRef.current.shift()!;
-            outputBufferSizeRef.current -= removed.data.length;
-          }
+      case "output": {
+        // 세션별 출력 기록 누적
+        let chunks = sessionOutputRef.current.get(msg.sessionId);
+        if (!chunks) {
+          chunks = [];
+          sessionOutputRef.current.set(msg.sessionId, chunks);
+        }
+        chunks.push(msg.data);
+        let size = (sessionOutputSizeRef.current.get(msg.sessionId) ?? 0) + msg.data.length;
+        while (size > SESSION_OUTPUT_LIMIT && chunks.length > 0) {
+          size -= chunks.shift()!.length;
+        }
+        sessionOutputSizeRef.current.set(msg.sessionId, size);
+        // 리스너에 전달
+        for (const listener of outputListenersRef.current) {
+          listener(msg.sessionId, msg.data);
         }
         break;
+      }
       case "exited":
         setSessions((prev) =>
           prev.map((s) => (s.id === msg.sessionId ? { ...s, exited: true } : s)),
@@ -82,6 +87,8 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         }
         break;
       case "closed":
+        sessionOutputRef.current.delete(msg.sessionId);
+        sessionOutputSizeRef.current.delete(msg.sessionId);
         setSessions((prev) => prev.filter((s) => s.id !== msg.sessionId));
         break;
       case "renamed":
@@ -106,22 +113,18 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
   const addOutputListener = useCallback((cb: (sessionId: string, data: string) => void) => {
     outputListenersRef.current.add(cb);
-    // 버퍼에 쌓인 output 플러시
-    if (outputBufferRef.current.length > 0) {
-      for (const { sessionId, data } of outputBufferRef.current) {
-        cb(sessionId, data);
-      }
-      outputBufferRef.current = [];
-      outputBufferSizeRef.current = 0;
-    }
     return () => {
       outputListenersRef.current.delete(cb);
     };
   }, []);
 
+  const getSessionOutput = useCallback((sessionId: string): string[] => {
+    return sessionOutputRef.current.get(sessionId) ?? [];
+  }, []);
+
   return (
     <SocketContext.Provider
-      value={{ sessions, send, status, config, onceCreated, addOutputListener }}
+      value={{ sessions, send, status, config, onceCreated, addOutputListener, getSessionOutput }}
     >
       {children}
     </SocketContext.Provider>

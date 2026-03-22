@@ -1,10 +1,29 @@
-# brc
+<div align="center">
 
-모바일에서 로컬 터미널 쓰는 CLI 도구.
+# Better Remote Control
 
-Claude Code Remote Control이 너무 불안정해서 만들었음. Cloudflare Tunnel로 로컬 터미널을 모바일 브라우저에 노출하는 방식. Claude Code뿐 아니라 아무 CLI 도구나 쓸 수 있음.
+**Your local terminal, on your phone.**
 
-## 설치 & 실행
+A lightweight, mobile-first web terminal powered by Cloudflare Tunnel.\
+Built for running CLI tools like [Claude Code](https://docs.anthropic.com/en/docs/claude-code) from anywhere.
+
+<br>
+
+<a href="README.ko.md">한국어</a>
+
+<br>
+
+<img src="docs/screenshots/home.png" alt="brc home" width="280">
+
+</div>
+
+---
+
+## Why?
+
+[Claude Code Remote Control](https://github.com/anthropics/claude-code) is unstable. Every alternative I tried was either bloated with unnecessary features or riddled with bugs. So I built **brc** — a focused tool that does one thing well: puts your local terminal on your phone.
+
+## Quick Start
 
 ```bash
 git clone https://github.com/custardcream98/better-remote-control.git
@@ -13,55 +32,114 @@ pnpm install && pnpm run build
 pnpm start
 ```
 
-QR 코드 뜨면 모바일로 스캔. 비밀번호 입력하면 터미널 나옴.
+A QR code appears in your terminal. Scan it, enter the password, and you're in.
 
-## 옵션
+## Features
+
+<table>
+<tr>
+<td width="50%">
+
+### Multi-Session Terminals
+
+Create multiple terminal sessions, each with its own working directory. Browse your filesystem to pick where each session starts.
+
+</td>
+<td width="50%">
+
+<img src="docs/screenshots/browse.png" alt="directory browser" width="280">
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+<img src="docs/screenshots/quick-keys.png" alt="quick keys" width="280">
+
+</td>
+<td width="50%">
+
+### Mobile-Optimized Keyboard
+
+Special keys designed for terminal use on a phone:
+
+- <kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>Tab</kbd> <kbd>Esc</kbd> — sticky modifiers
+- <kbd>←</kbd> <kbd>↓</kbd> <kbd>↑</kbd> <kbd>→</kbd> — long-press to repeat
+- <kbd>Opt+Enter</kbd> <kbd>|</kbd> <kbd>/</kbd> <kbd>~</kbd> <kbd>$</kbd> <kbd>\_</kbd>
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### Image Upload
+
+Upload images from your camera or gallery directly into the terminal. The file path is automatically inserted — perfect for passing images to Claude Code.
+
+</td>
+<td width="50%">
+
+### Always On
+
+Keeps your Mac awake with `caffeinate` — close the lid, and your terminal keeps running.
+
+> Requires power connection.
+
+</td>
+</tr>
+</table>
+
+### Auto-Reconnect
+
+Lost connection? brc automatically reconnects and restores your full terminal history. No output is lost.
+
+### Secure by Default
+
+Password authentication with rate limiting (5 attempts / 60s), CSRF protection, and timing-safe comparison. Auth tokens are `HttpOnly` + `SameSite=Strict`.
+
+## Usage
 
 ```bash
-# Claude Code 자동 실행
+brc [options]
+```
+
+| Option                | Description                                     |
+| --------------------- | ----------------------------------------------- |
+| `-p, --port <port>`   | Port number (default: `4020`)                   |
+| `--password <pw>`     | Set password manually (default: auto-generated) |
+| `-s, --shell <shell>` | Shell path (default: `$SHELL`)                  |
+| `-c, --cwd <dir>`     | Default working directory (default: `$HOME`)    |
+| `--command <cmd>`     | Auto-execute command on session start           |
+| `--no-tunnel`         | Disable Cloudflare Tunnel (local only)          |
+| `--no-caffeinate`     | Disable sleep prevention                        |
+
+<details>
+<summary><b>Examples</b></summary>
+
+```bash
+# Run Claude Code remotely
 brc --command "claude --dangerously-skip-permissions"
 
-# 특정 디렉토리에서 시작
+# Start in a specific project
 brc --cwd ~/my-project
 
-# 터널 없이 로컬만
+# Local network only (no tunnel)
 brc --no-tunnel
 
-# 비밀번호 직접 지정
-brc --password mypassword
+# Custom password
+brc --password mysecretpassword
 ```
 
-전체 옵션은 `brc --help` 참고.
+</details>
 
-## 주요 기능
+## Prerequisites
 
-- **멀티 세션** — 탭으로 여러 터미널 동시 사용, 세션별 디렉토리/자동 명령어
-- **모바일 특수키** — Ctrl, Alt, Tab, Esc, 방향키, Opt+Enter 등. 길게 누르면 반복
-- **이미지 업로드** — 카메라/갤러리에서 이미지 선택 → 서버 업로드 → 경로 자동 삽입 (Claude Code에 이미지 넘길 때 유용)
-- **sleep 방지** — caffeinate로 맥북 덮어도 계속 실행 (전원 연결 필요)
-- **재연결 복원** — 네트워크 끊겼다 붙으면 터미널 히스토리 자동 복원
-- **인증** — 비밀번호 + rate limiting + CSRF + timing-safe 비교
+| Requirement       | Install                                      |
+| ----------------- | -------------------------------------------- |
+| **Node.js** >= 18 | [nodejs.org](https://nodejs.org)             |
+| **pnpm**          | `npm install -g pnpm`                        |
+| **cloudflared**   | `brew install cloudflared` (only for tunnel) |
 
-## 사전 요구사항
-
-- Node.js >= 18
-- pnpm
-- cloudflared (`brew install cloudflared`, 터널 쓸 때만)
-
-## 스택
-
-서버: Express + WebSocket + node-pty / 클라이언트: React + Tailwind + shadcn/ui + xterm.js / 터널: Cloudflare Quick Tunnel (무료)
-
-## 개발
-
-```bash
-pnpm run dev:client    # 클라이언트 HMR
-pnpm run dev:server    # 서버 watch
-pnpm run build         # 전체 빌드
-pnpm run lint          # 린트
-cd client && pnpm run storybook  # 스토리북
-```
-
-## 라이선스
+## License
 
 MIT

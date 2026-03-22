@@ -20,11 +20,11 @@ interface QuickKeysProps {
 
 const key = cn(
   "flex flex-1 items-center justify-center rounded-[10px] font-mono text-[11px] font-medium h-9",
-  "bg-gradient-to-b from-[#2a3055] to-[#222845] text-[#9ba3c0]",
-  "border border-[#363d65]/60",
-  "active:from-[#222845] active:to-[#1e2340] active:text-white",
+  "bg-secondary text-muted-foreground",
+  "border border-border/60",
+  "active:bg-accent active:text-foreground",
   "transition-all duration-75 touch-manipulation select-none",
-  "shadow-[0_1px_2px_rgba(0,0,0,0.4)]",
+  "shadow-[0_1px_2px_rgba(0,0,0,0.3)]",
   "active:shadow-none active:translate-y-px",
 );
 
@@ -97,7 +97,7 @@ export function QuickKeys({ activeSessionId, send }: QuickKeysProps) {
   }
 
   return (
-    <div className="shrink-0 border-t border-[#1a1f38]/50 bg-[#0c0e1a] px-[10px] pb-[max(10px,env(safe-area-inset-bottom))] pt-[10px]">
+    <div className="border-border/50 bg-background shrink-0 border-t px-[10px] pb-[max(10px,env(safe-area-inset-bottom))] pt-[10px]">
       {/* Row 1 (top, less accessible): auxiliary keys */}
       <div className="flex gap-[6px]">
         <button className={smallKey} onClick={() => sendKey("\x03")}>

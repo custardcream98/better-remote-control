@@ -68,10 +68,11 @@ export function TerminalPane({
       fontSize: fontSizeRef.current,
       fontFamily: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace',
       theme: {
-        background: "#1a1a2e",
-        foreground: "#e0e0e0",
-        cursor: "#e94560",
-        selectionBackground: "rgba(233, 69, 96, 0.25)",
+        background: "#17141f",
+        foreground: "#e8e6ed",
+        cursor: "#8b5cf6",
+        cursorAccent: "#17141f",
+        selectionBackground: "rgba(139, 92, 246, 0.25)",
       },
       allowProposedApi: true,
     });

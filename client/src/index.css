@@ -28,26 +28,26 @@
 }
 
 :root {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.922 0 0);
-  --card: oklch(0.17 0.01 260);
-  --card-foreground: oklch(0.922 0 0);
-  --popover: oklch(0.17 0.01 260);
-  --popover-foreground: oklch(0.922 0 0);
-  --primary: oklch(0.65 0.2 15);
+  --background: oklch(0.12 0.003 285);
+  --foreground: oklch(0.94 0.005 285);
+  --card: oklch(0.155 0.006 285);
+  --card-foreground: oklch(0.94 0.005 285);
+  --popover: oklch(0.155 0.006 285);
+  --popover-foreground: oklch(0.94 0.005 285);
+  --primary: oklch(0.65 0.22 280);
   --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.25 0.015 260);
-  --secondary-foreground: oklch(0.922 0 0);
-  --muted: oklch(0.25 0.015 260);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.25 0.015 260);
-  --accent-foreground: oklch(0.922 0 0);
+  --secondary: oklch(0.2 0.006 285);
+  --secondary-foreground: oklch(0.94 0.005 285);
+  --muted: oklch(0.2 0.006 285);
+  --muted-foreground: oklch(0.55 0.01 285);
+  --accent: oklch(0.22 0.008 285);
+  --accent-foreground: oklch(0.94 0.005 285);
   --destructive: oklch(0.55 0.2 25);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.3 0.015 260);
-  --input: oklch(0.3 0.015 260);
-  --ring: oklch(0.65 0.2 15);
-  --radius: 0.5rem;
+  --border: oklch(0.23 0.008 285);
+  --input: oklch(0.23 0.008 285);
+  --ring: oklch(0.65 0.22 280);
+  --radius: 0.625rem;
 }
 
 /* Tailwind CSS 4의 preflight가 box-sizing: border-box와 margin/padding 리셋을 처리하므로

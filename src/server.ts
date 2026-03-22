@@ -237,17 +237,19 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
   <title>brc — login</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #1a1a2e; color: #e0e0e0; font-family: system-ui; display: flex; justify-content: center; align-items: center; min-height: 100dvh; }
-    .card { background: #16213e; padding: 2rem; border-radius: 12px; width: min(360px, 90vw); }
-    h1 { font-size: 1.2rem; margin-bottom: 1rem; text-align: center; }
-    input { width: 100%; padding: 12px; border: 1px solid #333; border-radius: 8px; background: #0f3460; color: #fff; font-size: 16px; margin-bottom: 1rem; }
-    button { width: 100%; padding: 12px; border: none; border-radius: 8px; background: #e94560; color: #fff; font-size: 16px; cursor: pointer; }
+    body { background: #17141f; color: #eee; font-family: system-ui, -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100dvh; }
+    .card { background: #1e1b28; border: 1px solid rgba(255,255,255,0.06); padding: 2.5rem 2rem; border-radius: 16px; width: min(360px, 90vw); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+    .logo { text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
+    .logo span { color: #9d8bf7; }
+    input { width: 100%; padding: 12px 14px; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; background: rgba(255,255,255,0.04); color: #fff; font-size: 16px; margin-bottom: 1rem; outline: none; transition: border-color 0.2s; }
+    input:focus { border-color: #9d8bf7; }
+    button { width: 100%; padding: 12px; border: none; border-radius: 10px; background: #8b5cf6; color: #fff; font-size: 15px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; }
     button:active { opacity: 0.8; }
-    .error { color: #e94560; text-align: center; margin-bottom: 0.5rem; font-size: 0.9rem; }
+    .error { color: #f87171; text-align: center; margin-bottom: 0.75rem; font-size: 0.85rem; }
   </style>
 </head><body>
   <div class="card">
-    <h1>brc</h1>
+    <div class="logo"><span>&gt;_</span> brc</div>
     <div class="error" id="error"></div>
     <form id="form">
       <input type="hidden" id="csrf" value="${csrfToken}">

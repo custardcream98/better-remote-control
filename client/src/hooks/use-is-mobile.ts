@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const MOBILE_QUERY = "(hover: none) and (pointer: coarse)";
+const MOBILE_QUERY = "(pointer: coarse)";
 
 export function useIsMobile(): boolean {
   const [isMobile, setIsMobile] = useState(() => window.matchMedia(MOBILE_QUERY).matches);

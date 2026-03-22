@@ -29,8 +29,10 @@ export function SocketProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState({ defaultCwd: "", defaultCommand: "" });
   const createdCallbackRef = useRef<((sessionId: string) => void) | null>(null);
   const outputListenersRef = useRef<Set<(sessionId: string, data: string) => void>>(new Set());
-  // 리스너 등록 전에 도착한 output 메시지를 버퍼링
+  // 리스너 등록 전에 도착한 output 메시지를 버퍼링 (최대 100KB)
   const outputBufferRef = useRef<{ sessionId: string; data: string }[]>([]);
+  const outputBufferSizeRef = useRef(0);
+  const OUTPUT_BUFFER_LIMIT = 100_000;
 
   useEffect(() => {
     fetch("/api/config")
@@ -59,6 +61,15 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         } else {
           // 리스너 없으면 버퍼에 저장 (재연결 시 터미널 마운트 전 도착하는 output 대비)
           outputBufferRef.current.push({ sessionId: msg.sessionId, data: msg.data });
+          outputBufferSizeRef.current += msg.data.length;
+          // 버퍼 크기 제한 — 오래된 항목부터 제거
+          while (
+            outputBufferSizeRef.current > OUTPUT_BUFFER_LIMIT &&
+            outputBufferRef.current.length > 0
+          ) {
+            const removed = outputBufferRef.current.shift()!;
+            outputBufferSizeRef.current -= removed.data.length;
+          }
         }
         break;
       case "exited":
@@ -101,6 +112,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         cb(sessionId, data);
       }
       outputBufferRef.current = [];
+      outputBufferSizeRef.current = 0;
     }
     return () => {
       outputListenersRef.current.delete(cb);

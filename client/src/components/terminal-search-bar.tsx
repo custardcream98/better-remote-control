@@ -13,9 +13,9 @@ interface TerminalSearchBarProps {
 
 const iconBtn = cn(
   "flex h-7 w-7 items-center justify-center rounded-md",
-  "text-[var(--muted-foreground)] transition-colors",
-  "hover:bg-[var(--muted)] hover:text-[var(--foreground)]",
-  "active:bg-[var(--muted)] active:text-[var(--foreground)]",
+  "text-muted-foreground transition-colors",
+  "hover:bg-muted hover:text-foreground",
+  "active:bg-muted active:text-foreground",
 );
 
 export function TerminalSearchBar({
@@ -45,14 +45,14 @@ export function TerminalSearchBar({
   }
 
   return (
-    <div className="absolute right-2 top-2 z-10 flex items-center gap-1 rounded-lg border border-[var(--border)] bg-[var(--card)] px-2 py-1 shadow-lg">
+    <div className="border-border bg-card absolute right-2 top-2 z-10 flex items-center gap-1 rounded-lg border px-2 py-1 shadow-lg">
       <input
         ref={inputRef}
         type="text"
         placeholder={t("terminal.searchPlaceholder")}
         onChange={(e) => onSearch(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="w-40 bg-transparent text-xs text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none"
+        className="text-foreground placeholder:text-muted-foreground w-40 bg-transparent text-xs focus:outline-none"
       />
       <button className={iconBtn} onClick={onPrevious} aria-label={t("terminal.searchPrevious")}>
         <ChevronUp size={14} />

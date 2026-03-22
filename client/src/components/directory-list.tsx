@@ -25,7 +25,7 @@ export function DirectoryList({
     return (
       <div className="flex flex-col gap-2 p-4">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="h-12 animate-pulse rounded-lg bg-[var(--muted)]" />
+          <div key={i} className="bg-muted h-12 animate-pulse rounded-lg" />
         ))}
       </div>
     );
@@ -34,10 +34,10 @@ export function DirectoryList({
   if (error) {
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-center">
-        <p className="text-sm text-[var(--muted-foreground)]">{error}</p>
+        <p className="text-muted-foreground text-sm">{error}</p>
         <button
           onClick={onRetry}
-          className="rounded-lg bg-[var(--muted)] px-4 py-2 text-sm text-[var(--foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:opacity-80"
+          className="bg-muted text-foreground focus-visible:ring-ring rounded-lg px-4 py-2 text-sm transition-opacity focus-visible:outline-none focus-visible:ring-2 active:opacity-80"
         >
           {t("directory.retry")}
         </button>
@@ -53,14 +53,14 @@ export function DirectoryList({
       {showParent && (
         <button
           onClick={onGoUp}
-          className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:bg-[var(--accent)]"
+          className="border-border focus-visible:ring-ring active:bg-accent flex items-center gap-3 border-b px-4 py-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2"
         >
-          <ArrowUp size={18} aria-hidden="true" className="text-[var(--muted-foreground)]" />
-          <span className="text-[var(--muted-foreground)]">..</span>
+          <ArrowUp size={18} aria-hidden="true" className="text-muted-foreground" />
+          <span className="text-muted-foreground">..</span>
         </button>
       )}
       {visibleDirs.length === 0 ? (
-        <p className="py-16 text-center text-sm text-[var(--muted-foreground)]">
+        <p className="text-muted-foreground py-16 text-center text-sm">
           {t("directory.noSubdirectories")}
         </p>
       ) : (
@@ -68,15 +68,11 @@ export function DirectoryList({
           <button
             key={d.name}
             onClick={() => onNavigate(d.name)}
-            className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:bg-[var(--accent)]"
+            className="border-border focus-visible:ring-ring active:bg-accent flex items-center gap-3 border-b px-4 py-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2"
           >
-            <Folder size={18} aria-hidden="true" className="shrink-0 text-[var(--primary)]" />
+            <Folder size={18} aria-hidden="true" className="text-primary shrink-0" />
             <span className="min-w-0 flex-1 truncate text-left">{d.name}</span>
-            <ChevronRight
-              size={16}
-              aria-hidden="true"
-              className="shrink-0 text-[var(--muted-foreground)]"
-            />
+            <ChevronRight size={16} aria-hidden="true" className="text-muted-foreground shrink-0" />
           </button>
         ))
       )}

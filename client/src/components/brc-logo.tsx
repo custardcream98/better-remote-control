@@ -54,7 +54,7 @@ export function BrcLogo({ className }: BrcLogoProps) {
 
       {/* Wordmark */}
       <span className="font-mono text-[13px] font-bold leading-none tracking-tight">
-        <span className="text-[var(--foreground)]">brc</span>
+        <span className="text-foreground">brc</span>
       </span>
     </span>
   );

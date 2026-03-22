@@ -16,12 +16,12 @@ export function ConfigBar() {
   const showHome = location.pathname !== "/";
 
   return (
-    <header className="flex h-11 shrink-0 items-center justify-between border-b border-[var(--border)] bg-[var(--card)] px-3 pt-[env(safe-area-inset-top)]">
+    <header className="border-border bg-card flex h-11 shrink-0 items-center justify-between border-b px-3 pt-[env(safe-area-inset-top)]">
       <div className="flex items-center gap-2">
         {showHome ? (
           <Link
             to="/"
-            className="flex items-center gap-1.5 text-[var(--muted-foreground)] transition-colors active:text-[var(--foreground)]"
+            className="text-muted-foreground active:text-foreground flex items-center gap-1.5 transition-colors"
           >
             <Home size={16} aria-hidden="true" />
             <BrcLogo />
@@ -52,7 +52,7 @@ export function ConfigBar() {
         <button
           onClick={() => setSettingsOpen(true)}
           aria-label={t("config.settings")}
-          className="rounded-md p-1.5 text-[var(--muted-foreground)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:text-[var(--foreground)]"
+          className="text-muted-foreground focus-visible:ring-ring active:text-foreground rounded-md p-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2"
         >
           <Settings size={16} />
         </button>

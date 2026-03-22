@@ -89,9 +89,7 @@ function SettingsDialogContent({ onOpenChange }: { onOpenChange: (open: boolean)
               onChange={(e) => setCommand(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSave()}
             />
-            <p className="text-xs text-[var(--muted-foreground)]">
-              {t("settings.autoCommandDescription")}
-            </p>
+            <p className="text-muted-foreground text-xs">{t("settings.autoCommandDescription")}</p>
           </div>
           <div className="grid gap-1.5">
             <Label htmlFor="font-size">{t("settings.fontSize")}</Label>
@@ -112,7 +110,7 @@ function SettingsDialogContent({ onOpenChange }: { onOpenChange: (open: boolean)
                 }}
                 className="flex-1"
               />
-              <span className="w-10 text-right text-sm tabular-nums text-[var(--foreground)]">
+              <span className="text-foreground w-10 text-right text-sm tabular-nums">
                 {fontSize}px
               </span>
             </div>
@@ -135,7 +133,7 @@ function SettingsDialogContent({ onOpenChange }: { onOpenChange: (open: boolean)
                 />
               </button>
             </div>
-            <p className="text-xs text-[var(--muted-foreground)]">
+            <p className="text-muted-foreground text-xs">
               {notificationDenied
                 ? t("settings.notificationDenied")
                 : t("settings.bellNotificationDescription")}
@@ -147,7 +145,7 @@ function SettingsDialogContent({ onOpenChange }: { onOpenChange: (open: boolean)
               id="lang"
               value={i18n.language.startsWith("ko") ? "ko" : "en"}
               onChange={(e) => i18n.changeLanguage(e.target.value)}
-              className="w-full rounded-md border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+              className="border-border bg-background text-foreground focus-visible:ring-ring w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2"
             >
               <option value="en">English</option>
               <option value="ko">한국어</option>

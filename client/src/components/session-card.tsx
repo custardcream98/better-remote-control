@@ -18,20 +18,20 @@ export function SessionCard({ session, onClose }: SessionCardProps) {
       to="/terminal/$sessionId"
       params={{ sessionId: session.id }}
       className={cn(
-        "group relative flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 transition-colors active:bg-[var(--accent)]",
+        "border-border bg-card active:bg-accent group relative flex items-center gap-3 rounded-xl border p-4 transition-colors",
         session.exited && "opacity-50",
       )}
     >
       <div
         className={cn(
           "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg",
-          session.exited ? "bg-[var(--muted)]" : "bg-[var(--primary)]/10",
+          session.exited ? "bg-muted" : "bg-primary/10",
         )}
       >
         <Terminal
           size={20}
           aria-hidden="true"
-          className={session.exited ? "text-[var(--muted-foreground)]" : "text-[var(--primary)]"}
+          className={session.exited ? "text-muted-foreground" : "text-primary"}
         />
       </div>
 
@@ -39,7 +39,7 @@ export function SessionCard({ session, onClose }: SessionCardProps) {
         <p className={cn("truncate text-sm font-medium", session.exited && "line-through")}>
           {session.name}
         </p>
-        <p className="truncate text-xs text-[var(--muted-foreground)]">{session.cwd}</p>
+        <p className="text-muted-foreground truncate text-xs">{session.cwd}</p>
       </div>
 
       <button
@@ -49,7 +49,7 @@ export function SessionCard({ session, onClose }: SessionCardProps) {
           onClose(session.id);
         }}
         aria-label={t("session.close")}
-        className="rounded-md p-1.5 text-[var(--muted-foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:text-[var(--primary)]"
+        className="text-muted-foreground focus-visible:ring-ring active:text-primary rounded-md p-1.5 transition-opacity focus-visible:outline-none focus-visible:ring-2"
       >
         <X size={16} aria-hidden="true" />
       </button>

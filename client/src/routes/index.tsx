@@ -24,15 +24,11 @@ function HomePage() {
         {sessions.length === 0 ? (
           // Empty state screen when there are no sessions
           <div className="flex flex-1 flex-col items-center justify-center text-center">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--muted)]">
-              <Terminal size={28} className="text-[var(--muted-foreground)]" />
+            <div className="bg-muted mb-4 flex h-16 w-16 items-center justify-center rounded-2xl">
+              <Terminal size={28} className="text-muted-foreground" />
             </div>
-            <p className="mb-1 text-sm font-medium text-[var(--foreground)]">
-              {t("home.noSessions")}
-            </p>
-            <p className="mb-6 text-xs text-[var(--muted-foreground)]">
-              {t("home.noSessionsDescription")}
-            </p>
+            <p className="text-foreground mb-1 text-sm font-medium">{t("home.noSessions")}</p>
+            <p className="text-muted-foreground mb-6 text-xs">{t("home.noSessionsDescription")}</p>
           </div>
         ) : (
           // Session list card grid
@@ -45,11 +41,11 @@ function HomePage() {
       </div>
 
       {/* Bottom-pinned new session button */}
-      <div className="shrink-0 border-t border-[var(--border)] bg-[var(--background)] p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div className="border-border bg-background shrink-0 border-t p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <Link
           to="/browse"
           search={{ path: "" }}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:opacity-80"
+          className="bg-primary text-primary-foreground focus-visible:ring-ring flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition-opacity focus-visible:outline-none focus-visible:ring-2 active:opacity-80"
         >
           <Plus size={18} />
           {t("home.newSession")}

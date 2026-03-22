@@ -102,11 +102,11 @@ function BrowsePage() {
       </div>
 
       {/* Bottom-pinned "Open terminal here" button */}
-      <div className="shrink-0 border-t border-[var(--border)] bg-[var(--background)] p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div className="border-border bg-background shrink-0 border-t p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <button
           onClick={handleOpenTerminal}
           disabled={creating}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:opacity-80 disabled:opacity-50"
+          className="bg-primary text-primary-foreground focus-visible:ring-ring flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition-opacity focus-visible:outline-none focus-visible:ring-2 active:opacity-80 disabled:opacity-50"
         >
           {creating ? t("browse.creating") : t("browse.openTerminal")}
         </button>

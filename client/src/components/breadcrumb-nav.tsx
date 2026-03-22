@@ -28,7 +28,7 @@ export function BreadcrumbNav({ path, onNavigate }: BreadcrumbNavProps) {
       >
         <button
           onClick={() => onNavigate("/")}
-          className="shrink-0 rounded px-1.5 py-0.5 text-[var(--muted-foreground)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:text-[var(--foreground)]"
+          className="text-muted-foreground focus-visible:ring-ring active:text-foreground shrink-0 rounded px-1.5 py-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2"
         >
           /
         </button>
@@ -37,15 +37,11 @@ export function BreadcrumbNav({ path, onNavigate }: BreadcrumbNavProps) {
           const isLast = i === segments.length - 1;
           return (
             <span key={segPath} className="flex shrink-0 items-center gap-1">
-              <ChevronRight
-                size={12}
-                aria-hidden="true"
-                className="text-[var(--muted-foreground)]"
-              />
+              <ChevronRight size={12} aria-hidden="true" className="text-muted-foreground" />
               <button
                 onClick={() => onNavigate(segPath)}
-                className={`rounded px-1.5 py-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:text-[var(--foreground)] ${
-                  isLast ? "font-medium text-[var(--foreground)]" : "text-[var(--muted-foreground)]"
+                className={`focus-visible:ring-ring active:text-foreground rounded px-1.5 py-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 ${
+                  isLast ? "text-foreground font-medium" : "text-muted-foreground"
                 }`}
               >
                 {seg}

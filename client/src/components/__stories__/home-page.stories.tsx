@@ -52,13 +52,11 @@ function HomePageLayout({
                 textAlign: "center",
               }}
             >
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--muted)]">
-                <Terminal size={28} className="text-[var(--muted-foreground)]" />
+              <div className="bg-muted mb-4 flex h-16 w-16 items-center justify-center rounded-2xl">
+                <Terminal size={28} className="text-muted-foreground" />
               </div>
-              <p className="mb-1 text-sm font-medium text-[var(--foreground)]">
-                {t("home.noSessions")}
-              </p>
-              <p className="mb-6 text-xs text-[var(--muted-foreground)]">
+              <p className="text-foreground mb-1 text-sm font-medium">{t("home.noSessions")}</p>
+              <p className="text-muted-foreground mb-6 text-xs">
                 {t("home.noSessionsDescription")}
               </p>
             </div>
@@ -74,9 +72,9 @@ function HomePageLayout({
       </div>
 
       {/* Bottom fixed button */}
-      <div className="border-t border-[var(--border)] bg-[var(--background)] p-4">
+      <div className="border-border bg-background border-t p-4">
         <button
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity active:opacity-80"
+          className="bg-primary text-primary-foreground flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition-opacity active:opacity-80"
           onClick={() => console.log("new session")}
         >
           <Plus size={18} />

@@ -145,7 +145,7 @@ function TerminalPage() {
         {isMobile && !searchOpen && (
           <button
             onClick={() => setSearchOpen(true)}
-            className="bg-card/80 absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-lg text-[var(--muted-foreground)] shadow-md backdrop-blur-sm active:text-[var(--foreground)]"
+            className="bg-card/80 text-muted-foreground active:text-foreground absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-lg shadow-md backdrop-blur-sm"
             aria-label={t("terminal.search")}
           >
             <Search size={14} />
@@ -156,7 +156,7 @@ function TerminalPage() {
           <div className="absolute inset-0 flex items-end justify-center bg-black/40 pb-20">
             <Link
               to="/"
-              className="rounded-xl bg-[var(--primary)] px-6 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:opacity-80"
+              className="bg-primary text-primary-foreground focus-visible:ring-ring rounded-xl px-6 py-3 text-sm font-medium transition-opacity focus-visible:outline-none focus-visible:ring-2 active:opacity-80"
             >
               {t("terminal.goHome")}
             </Link>

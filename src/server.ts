@@ -355,7 +355,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
   app.use(express.static(path.join(__dirname, "..", "public")));
 
   // SPA fallback — TanStack Router가 클라이언트에서 라우팅 처리
-  app.get("*", (req, res, next) => {
+  app.get("/{*splat}", (req, res, next) => {
     if (req.path.startsWith("/api/") || req.path === "/login") return next();
     res.sendFile(path.join(__dirname, "..", "public", "index.html"));
   });

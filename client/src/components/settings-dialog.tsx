@@ -51,7 +51,7 @@ function SettingsDialogContent({ onOpenChange }: { onOpenChange: (open: boolean)
             <Label htmlFor="auto-cmd">Auto Command</Label>
             <Input
               id="auto-cmd"
-              placeholder="새 터미널에서 자동 실행할 명령어"
+              placeholder="새 터미널에서 자동 실행할 명령어…"
               value={command}
               onChange={(e) => setCommand(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSave()}

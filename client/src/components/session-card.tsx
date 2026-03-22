@@ -28,6 +28,7 @@ export function SessionCard({ session, onClose }: SessionCardProps) {
       >
         <Terminal
           size={20}
+          aria-hidden="true"
           className={session.exited ? "text-[var(--muted-foreground)]" : "text-[var(--primary)]"}
         />
       </div>
@@ -45,9 +46,10 @@ export function SessionCard({ session, onClose }: SessionCardProps) {
           e.stopPropagation();
           onClose(session.id);
         }}
-        className="rounded-md p-1.5 text-[var(--muted-foreground)] transition-opacity active:text-[var(--primary)]"
+        aria-label="세션 닫기"
+        className="rounded-md p-1.5 text-[var(--muted-foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:text-[var(--primary)]"
       >
-        <X size={16} />
+        <X size={16} aria-hidden="true" />
       </button>
     </Link>
   );

@@ -70,7 +70,7 @@ function TerminalPage() {
           <div className="absolute inset-0 flex items-end justify-center bg-black/40 pb-20">
             <Link
               to="/"
-              className="rounded-xl bg-[var(--primary)] px-6 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity active:opacity-80"
+              className="rounded-xl bg-[var(--primary)] px-6 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:opacity-80"
             >
               홈으로 돌아가기
             </Link>

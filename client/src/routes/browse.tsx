@@ -104,9 +104,9 @@ function BrowsePage() {
         <button
           onClick={handleOpenTerminal}
           disabled={creating}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity active:opacity-80 disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:opacity-80 disabled:opacity-50"
         >
-          {creating ? "생성 중..." : "여기서 터미널 열기"}
+          {creating ? "생성 중\u2026" : "여기서 터미널 열기"}
         </button>
       </div>
     </div>

@@ -35,7 +35,7 @@ export function DirectoryList({
         <p className="text-sm text-[var(--muted-foreground)]">{error}</p>
         <button
           onClick={onRetry}
-          className="rounded-lg bg-[var(--muted)] px-4 py-2 text-sm text-[var(--foreground)] transition-opacity active:opacity-80"
+          className="rounded-lg bg-[var(--muted)] px-4 py-2 text-sm text-[var(--foreground)] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:opacity-80"
         >
           재시도
         </button>
@@ -51,9 +51,9 @@ export function DirectoryList({
       {showParent && (
         <button
           onClick={onGoUp}
-          className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-3 text-sm transition-colors active:bg-[var(--accent)]"
+          className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:bg-[var(--accent)]"
         >
-          <ArrowUp size={18} className="text-[var(--muted-foreground)]" />
+          <ArrowUp size={18} aria-hidden="true" className="text-[var(--muted-foreground)]" />
           <span className="text-[var(--muted-foreground)]">..</span>
         </button>
       )}
@@ -66,11 +66,15 @@ export function DirectoryList({
           <button
             key={d.name}
             onClick={() => onNavigate(d.name)}
-            className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-3 text-sm transition-colors active:bg-[var(--accent)]"
+            className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:bg-[var(--accent)]"
           >
-            <Folder size={18} className="shrink-0 text-[var(--primary)]" />
+            <Folder size={18} aria-hidden="true" className="shrink-0 text-[var(--primary)]" />
             <span className="min-w-0 flex-1 truncate text-left">{d.name}</span>
-            <ChevronRight size={16} className="shrink-0 text-[var(--muted-foreground)]" />
+            <ChevronRight
+              size={16}
+              aria-hidden="true"
+              className="shrink-0 text-[var(--muted-foreground)]"
+            />
           </button>
         ))
       )}

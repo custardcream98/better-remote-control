@@ -20,7 +20,7 @@ export function ConfigBar() {
             to="/"
             className="flex items-center gap-1.5 text-[var(--muted-foreground)] transition-colors active:text-[var(--foreground)]"
           >
-            <Home size={16} />
+            <Home size={16} aria-hidden="true" />
             <span className="text-sm font-medium">brc</span>
           </Link>
         ) : (
@@ -38,10 +38,18 @@ export function ConfigBar() {
             status === "reconnecting" && "animate-pulse bg-yellow-500",
           )}
         />
+        <span className="sr-only">
+          {status === "connected"
+            ? "연결됨"
+            : status === "disconnected"
+              ? "연결 끊김"
+              : "재연결 중"}
+        </span>
 
         <button
           onClick={() => setSettingsOpen(true)}
-          className="rounded-md p-1.5 text-[var(--muted-foreground)] transition-colors active:text-[var(--foreground)]"
+          aria-label="설정"
+          className="rounded-md p-1.5 text-[var(--muted-foreground)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] active:text-[var(--foreground)]"
         >
           <Settings size={16} />
         </button>

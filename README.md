@@ -5,7 +5,7 @@
 **Your local terminal, on your phone.**
 
 A lightweight, mobile-first web terminal powered by Cloudflare Tunnel.\
-Built for running CLI tools like [Claude Code](https://docs.anthropic.com/en/docs/claude-code) from anywhere.
+Built for running [Claude Code](https://docs.anthropic.com/en/docs/claude-code) from anywhere.
 
 <br>
 
@@ -13,7 +13,7 @@ Built for running CLI tools like [Claude Code](https://docs.anthropic.com/en/doc
 
 <br>
 
-<img src="docs/screenshots/home.png" alt="brc home" width="280">
+<img src="docs/screenshots/hero-terminal.png" alt="Claude Code running on brc" width="300">
 
 </div>
 
@@ -40,14 +40,28 @@ A QR code appears in your terminal. Scan it, enter the password, and you're in.
 <tr>
 <td width="50%">
 
-### Multi-Session Terminals
-
-Create multiple terminal sessions, each with its own working directory. Browse your filesystem to pick where each session starts.
+<img src="docs/screenshots/hero-terminal.png" alt="terminal with Claude Code" width="280">
 
 </td>
 <td width="50%">
 
-<img src="docs/screenshots/browse.png" alt="directory browser" width="280">
+### Run Claude Code Remotely
+
+Control your local Claude Code session from anywhere — on the couch, in bed, on the go. All you need is a phone and a browser.
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### Multi-Session Terminals
+
+Run multiple sessions side by side — Claude Code in one, dev server in another, tests in a third. Switch between them with a tap.
+
+</td>
+<td width="50%">
+
+<img src="docs/screenshots/hero-sessions.png" alt="multi-session home" width="280">
 
 </td>
 </tr>
@@ -69,25 +83,15 @@ Special keys designed for terminal use on a phone:
 
 </td>
 </tr>
-<tr>
-<td width="50%">
+</table>
 
 ### Image Upload
 
 Upload images from your camera or gallery directly into the terminal. The file path is automatically inserted — perfect for passing images to Claude Code.
 
-</td>
-<td width="50%">
-
 ### Always On
 
-Keeps your Mac awake with `caffeinate` — close the lid, and your terminal keeps running.
-
-> Requires power connection.
-
-</td>
-</tr>
-</table>
+Keeps your Mac awake with `caffeinate` — close the lid, and your terminal keeps running. Requires power connection.
 
 ### Auto-Reconnect
 

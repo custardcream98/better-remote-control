@@ -5,7 +5,7 @@
 **내 로컬 터미널을, 내 폰에서.**
 
 Cloudflare Tunnel 기반 모바일 최적화 웹 터미널.\
-[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 같은 CLI 도구를 어디서든 쓸 수 있습니다.
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code)를 어디서든 쓸 수 있습니다.
 
 <br>
 
@@ -13,7 +13,7 @@ Cloudflare Tunnel 기반 모바일 최적화 웹 터미널.\
 
 <br>
 
-<img src="docs/screenshots/home.png" alt="brc 홈" width="280">
+<img src="docs/screenshots/hero-terminal.png" alt="brc에서 Claude Code 실행" width="300">
 
 </div>
 
@@ -40,14 +40,28 @@ pnpm start
 <tr>
 <td width="50%">
 
-### 멀티 세션
-
-여러 터미널 세션을 동시에 사용할 수 있습니다. 파일 브라우저에서 작업 디렉토리를 선택해 세션을 시작합니다.
+<img src="docs/screenshots/hero-terminal.png" alt="Claude Code 터미널" width="280">
 
 </td>
 <td width="50%">
 
-<img src="docs/screenshots/browse.png" alt="디렉토리 브라우저" width="280">
+### Claude Code 원격 제어
+
+로컬에서 돌아가는 Claude Code를 어디서든 — 소파에서, 침대에서, 이동 중에. 폰과 브라우저만 있으면 됩니다.
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 멀티 세션
+
+여러 세션을 동시에 — Claude Code 하나, 개발 서버 하나, 테스트 하나. 탭 한 번으로 전환합니다.
+
+</td>
+<td width="50%">
+
+<img src="docs/screenshots/hero-sessions.png" alt="멀티 세션 홈" width="280">
 
 </td>
 </tr>
@@ -69,25 +83,15 @@ pnpm start
 
 </td>
 </tr>
-<tr>
-<td width="50%">
+</table>
 
 ### 이미지 업로드
 
 카메라나 갤러리에서 이미지를 선택하면 서버에 업로드되고, 파일 경로가 터미널에 자동 삽입됩니다. Claude Code에 이미지를 넘길 때 유용합니다.
 
-</td>
-<td width="50%">
-
 ### 슬립 방지
 
-`caffeinate`로 맥북을 깨워둡니다. 덮개를 닫아도 터미널이 계속 실행됩니다.
-
-> 전원 연결 필요.
-
-</td>
-</tr>
-</table>
+`caffeinate`로 맥북을 깨워둡니다. 덮개를 닫아도 터미널이 계속 실행됩니다. 전원 연결 필요.
 
 ### 자동 재연결
 

@@ -1,0 +1,72 @@
+{
+  "name": "brc",
+  "version": "0.1.0",
+  "description": "Better Remote Control — 모바일에서 로컬 터미널을 안전하게 원격 조작",
+  "type": "module",
+  "bin": {
+    "brc": "./dist/cli.js"
+  },
+  "scripts": {
+    "postinstall": "chmod +x node_modules/node-pty/prebuilds/darwin-*/spawn-helper 2>/dev/null || true",
+    "build": "pnpm run build:client && pnpm run build:server",
+    "build:server": "tsc",
+    "build:client": "cd client && pnpm run build",
+    "start": "node dist/cli.js",
+    "dev:server": "tsc --watch",
+    "dev:client": "cd client && pnpm run dev",
+    "lint": "eslint src && cd client && pnpm exec eslint src",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "client/src/**/*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "src/**/*.ts": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
+  },
+  "keywords": [
+    "terminal",
+    "remote",
+    "mobile",
+    "cloudflare-tunnel",
+    "xterm"
+  ],
+  "files": [
+    "dist",
+    "public"
+  ],
+  "license": "MIT",
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "node-pty": "^1.0.0",
+    "qrcode-terminal": "^0.12.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "@types/ws": "^8.5.0",
+    "eslint": "^10.1.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-perfectionist": "^5.7.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0",
+    "prettier": "^3.0.0",
+    "prettier-plugin-tailwindcss": "^0.6.0",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.57.1"
+  }
+}

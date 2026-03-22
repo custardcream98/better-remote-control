@@ -43,8 +43,8 @@ function HomePage() {
       {/* 하단 고정 새 세션 버튼 */}
       <div className="sticky bottom-0 border-t border-[var(--border)] bg-[var(--background)] p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <Link
-          // @ts-expect-error -- /browse 라우트는 Task 7에서 추가됨
           to="/browse"
+          search={{ path: "" }}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-opacity active:opacity-80"
         >
           <Plus size={18} />새 세션 시작

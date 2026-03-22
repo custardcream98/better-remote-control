@@ -77,11 +77,11 @@ Run multiple sessions side by side — Claude Code in one, dev server in another
 
 ### Mobile-Optimized Keyboard
 
-Special keys designed for terminal use on a phone:
+Quick keys designed for thumb accessibility:
 
-- <kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>Tab</kbd> <kbd>Esc</kbd> — sticky modifiers
-- <kbd>←</kbd> <kbd>↓</kbd> <kbd>↑</kbd> <kbd>→</kbd> — long-press to repeat
-- <kbd>Opt+Enter</kbd> <kbd>|</kbd> <kbd>/</kbd> <kbd>~</kbd> <kbd>$</kbd> <kbd>\_</kbd>
+- <kbd>←</kbd> <kbd>↓</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>Tab</kbd> <kbd>Esc</kbd> — bottom row, easy reach
+- <kbd>Ctrl+C</kbd> <kbd>⇧Tab</kbd> <kbd>Opt+↵</kbd> <kbd>/</kbd> — top row, auxiliary
+- Arrow keys support long-press to repeat
 
 </td>
 </tr>

@@ -77,11 +77,11 @@ pnpm start
 
 ### 모바일 특수 키
 
-터미널 사용에 최적화된 키 배열:
+엄지 접근성을 고려한 키 배열:
 
-- <kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>Tab</kbd> <kbd>Esc</kbd> — 스티키 토글
-- <kbd>←</kbd> <kbd>↓</kbd> <kbd>↑</kbd> <kbd>→</kbd> — 길게 누르면 반복
-- <kbd>Opt+Enter</kbd> <kbd>|</kbd> <kbd>/</kbd> <kbd>~</kbd> <kbd>$</kbd> <kbd>\_</kbd>
+- <kbd>←</kbd> <kbd>↓</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>Tab</kbd> <kbd>Esc</kbd> — 하단 배치, 바로 닿는 곳
+- <kbd>Ctrl+C</kbd> <kbd>⇧Tab</kbd> <kbd>Opt+↵</kbd> <kbd>/</kbd> — 상단 배치, 보조 키
+- 화살표 키 길게 누르면 반복 입력
 
 </td>
 </tr>

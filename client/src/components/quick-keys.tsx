@@ -183,13 +183,11 @@ export function QuickKeys({
         </button>
       </div>
 
-      {/* Row 3: Symbols + Upload — 6 keys (plenty of horizontal space) */}
+      {/* Row 3: / key + Upload */}
       <div className="mt-[8px] flex gap-[6px]">
-        {["|", "/", "~", "$", "_"].map((c) => (
-          <button key={c} className={cn(key, "text-xs")} onClick={() => sendKey(c)}>
-            {c}
-          </button>
-        ))}
+        <button className={cn(key, "text-xs")} onClick={() => sendKey("/")}>
+          /
+        </button>
         <input
           ref={fileInputRef}
           type="file"

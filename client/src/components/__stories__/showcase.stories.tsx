@@ -101,7 +101,7 @@ export const TerminalWithClaude: Story = {
           style={{
             flex: 1,
             overflow: "hidden",
-            background: "#1a1a2e",
+            background: "#17141f",
             padding: "8px 12px",
           }}
         >
@@ -113,7 +113,7 @@ export const TerminalWithClaude: Story = {
               display: "inline-block",
               width: 8,
               height: 14,
-              background: "#e94560",
+              background: "#8b5cf6",
               animation: "blink 1s step-end infinite",
               marginTop: 4,
             }}

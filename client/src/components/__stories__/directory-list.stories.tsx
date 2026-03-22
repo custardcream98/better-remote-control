@@ -11,7 +11,7 @@ const meta: Meta<typeof DirectoryList> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ background: "#1a1a2e", minHeight: "100dvh" }}>
+      <div style={{ background: "#17141f", minHeight: "100dvh" }}>
         <Story />
       </div>
     ),

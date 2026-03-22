@@ -17,7 +17,7 @@ type Story = StoryObj<typeof QuickKeys>;
 
 export const Default: Story = {
   render: () => (
-    <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#1a1a2e" }}>
+    <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#17141f" }}>
       <QuickKeys activeSessionId="test-session" send={(msg) => console.log("send:", msg)} />
     </div>
   ),
@@ -25,7 +25,7 @@ export const Default: Story = {
 
 export const NoSession: Story = {
   render: () => (
-    <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#1a1a2e" }}>
+    <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#17141f" }}>
       <QuickKeys activeSessionId={null} send={() => {}} />
     </div>
   ),

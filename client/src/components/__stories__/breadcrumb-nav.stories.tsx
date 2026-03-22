@@ -23,7 +23,7 @@ function BreadcrumbNavWithState({ initialPath }: { initialPath: string }) {
   const [path, setPath] = useState(initialPath);
 
   return (
-    <div style={{ background: "#1a1a2e" }}>
+    <div style={{ background: "#17141f" }}>
       <BreadcrumbNav path={path} onNavigate={setPath} />
       <p style={{ color: "#888", fontSize: 12, padding: "8px 16px" }}>Current path: {path}</p>
     </div>

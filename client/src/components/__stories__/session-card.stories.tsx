@@ -13,7 +13,7 @@ const meta: Meta<typeof SessionCard> = {
   decorators: [
     (Story) => (
       <MockRouterProvider>
-        <div style={{ padding: 16, background: "#1a1a2e" }}>
+        <div style={{ padding: 16, background: "#17141f" }}>
           <Story />
         </div>
       </MockRouterProvider>

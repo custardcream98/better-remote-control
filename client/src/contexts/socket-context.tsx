@@ -5,7 +5,7 @@ import { useSocket } from "@/hooks/use-socket";
 import type { SessionInfo, ServerMessage, ClientMessage } from "@/hooks/use-socket";
 import type { ReactNode } from "react";
 
-interface SocketContextValue {
+export interface SocketContextValue {
   sessions: SessionInfo[];
   send: (msg: ClientMessage) => void;
   status: "connected" | "disconnected" | "reconnecting";
@@ -16,7 +16,7 @@ interface SocketContextValue {
   addOutputListener: (cb: (sessionId: string, data: string) => void) => () => void;
 }
 
-const SocketContext = createContext<SocketContextValue | null>(null);
+export const SocketContext = createContext<SocketContextValue | null>(null);
 
 export function useSessionContext() {
   const ctx = useContext(SocketContext);

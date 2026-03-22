@@ -128,9 +128,9 @@ export const TerminalWithClaude: Story = {
 /* ─── Multi-Session Home ─── */
 
 const realisticSessions: SessionInfo[] = [
-  { id: "s1", name: "claude-code", cwd: "~/my-project" },
-  { id: "s2", name: "dev-server", cwd: "~/my-project" },
-  { id: "s3", name: "api-tests", cwd: "~/my-project/tests" },
+  { id: "s1", name: "better-remote-control", cwd: "/Users/shiwoo/dev/better-remote-control" },
+  { id: "s2", name: "relay", cwd: "/Users/shiwoo/dev/relay" },
+  { id: "s3", name: "msw-devtools", cwd: "/Users/shiwoo/dev/msw-devtools" },
 ];
 
 export const MultiSession: Story = {

@@ -42,7 +42,7 @@ export function SessionCard({ session, send, onClose }: SessionCardProps) {
     return (
       <div
         className={cn(
-          "border-border bg-card flex items-center gap-3 rounded-xl border p-4",
+          "border-border bg-card flex min-w-0 items-center gap-3 overflow-hidden rounded-xl border p-4",
           session.exited && "opacity-50",
         )}
       >
@@ -87,7 +87,7 @@ export function SessionCard({ session, send, onClose }: SessionCardProps) {
       to="/terminal/$sessionId"
       params={{ sessionId: session.id }}
       className={cn(
-        "border-border bg-card active:bg-accent group relative flex items-center gap-3 rounded-xl border p-4 transition-colors",
+        "border-border bg-card active:bg-accent group relative flex min-w-0 items-center gap-3 overflow-hidden rounded-xl border p-4 transition-colors",
         session.exited && "opacity-50",
       )}
     >

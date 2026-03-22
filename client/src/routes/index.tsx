@@ -19,7 +19,7 @@ function HomePage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto">
+    <div className="flex min-w-0 flex-1 flex-col overflow-y-auto">
       <div className="mx-auto flex w-full max-w-lg flex-1 flex-col p-4">
         {sessions.length === 0 ? (
           // Empty state screen when there are no sessions
@@ -32,7 +32,7 @@ function HomePage() {
           </div>
         ) : (
           // Session list card grid
-          <div className="grid gap-3">
+          <div className="grid min-w-0 gap-3">
             {sessions.map((s) => (
               <SessionCard key={s.id} session={s} send={send} onClose={handleClose} />
             ))}

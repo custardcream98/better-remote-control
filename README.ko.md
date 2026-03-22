@@ -27,11 +27,27 @@ Cloudflare Tunnel 기반 모바일 최적화 웹 터미널.\
 
 ## 시작하기
 
+### 설치 (Node.js 불필요)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/custardcream98/better-remote-control/main/install.sh | sh
+```
+
+또는 [GitHub Releases](https://github.com/custardcream98/better-remote-control/releases)에서 바이너리를 직접 다운로드할 수 있습니다.
+
+### npm으로 설치
+
+```bash
+npx better-remote-control
+```
+
+### 소스에서 빌드
+
 ```bash
 git clone https://github.com/custardcream98/better-remote-control.git
 cd better-remote-control
-pnpm install && pnpm run build
-pnpm start
+pnpm install && cd client && pnpm install && cd ..
+pnpm run build && pnpm start
 ```
 
 터미널에 QR 코드가 나타나면 폰으로 스캔하고, 비밀번호를 입력하면 끝입니다.
@@ -140,11 +156,24 @@ brc --password mysecretpassword
 
 ## 사전 요구사항
 
-| 요구사항          | 설치                                        |
-| ----------------- | ------------------------------------------- |
-| **Node.js** >= 18 | [nodejs.org](https://nodejs.org)            |
-| **pnpm**          | `npm install -g pnpm`                       |
-| **cloudflared**   | `brew install cloudflared` (터널 사용 시만) |
+원격 접속을 위해 **cloudflared**가 필요합니다:
+
+```bash
+brew install cloudflared   # macOS
+# 또는 https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/ 참고
+```
+
+cloudflared 없이도 `--no-tunnel` 옵션으로 로컬 네트워크에서 사용할 수 있습니다.
+
+<details>
+<summary><b>소스에서 빌드할 경우</b></summary>
+
+| 요구사항          | 설치                             |
+| ----------------- | -------------------------------- |
+| **Node.js** >= 18 | [nodejs.org](https://nodejs.org) |
+| **pnpm**          | `npm install -g pnpm`            |
+
+</details>
 
 ## 라이선스
 

@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  # ── Build standalone tarballs per platform ─────────────────────────
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14
+            name: darwin-arm64
+          - os: macos-13
+            name: darwin-x64
+          - os: ubuntu-22.04
+            name: linux-x64
+          - os: windows-2022
+            name: win32-x64
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # Install root (server) deps
+      - run: pnpm install
+
+      # Install client deps & build everything
+      - run: cd client && pnpm install
+      - run: pnpm run build
+
+      # Create standalone tarball for this platform
+      - run: node scripts/package.mjs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: brc-${{ matrix.name }}
+          path: release/*
+
+  # ── Create GitHub Release ──────────────────────────────────────────
+  release:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: release
+          merge-multiple: true
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+          generate_release_notes: true
+
+  # ── Publish to npm ─────────────────────────────────────────────────
+  publish:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - run: pnpm install
+      - run: cd client && pnpm install
+      - run: pnpm run build
+
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

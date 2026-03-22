@@ -1,10 +1,11 @@
 {
-  "name": "brc",
+  "name": "better-remote-control",
   "version": "0.1.0",
-  "description": "Better Remote Control — 모바일에서 로컬 터미널을 안전하게 원격 조작",
+  "description": "Access your local terminal from a mobile browser via Cloudflare Tunnel",
   "type": "module",
   "bin": {
-    "brc": "./dist/cli.js"
+    "brc": "./dist/cli.js",
+    "better-remote-control": "./dist/cli.js"
   },
   "scripts": {
     "postinstall": "chmod +x node_modules/node-pty/prebuilds/darwin-*/spawn-helper 2>/dev/null || true",
@@ -17,7 +18,8 @@
     "lint": "eslint src && cd client && pnpm exec eslint src",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prepublishOnly": "pnpm run build"
   },
   "lint-staged": {
     "client/src/**/*.{ts,tsx}": [
@@ -37,12 +39,23 @@
     "remote",
     "mobile",
     "cloudflare-tunnel",
-    "xterm"
+    "xterm",
+    "pty",
+    "ssh-alternative",
+    "web-terminal"
   ],
   "files": [
     "dist",
     "public"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/custardcream98/better-remote-control.git"
+  },
+  "homepage": "https://github.com/custardcream98/better-remote-control#readme",
+  "bugs": {
+    "url": "https://github.com/custardcream98/better-remote-control/issues"
+  },
   "license": "MIT",
   "packageManager": "pnpm@10.12.1",
   "engines": {

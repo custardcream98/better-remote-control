@@ -1,5 +1,6 @@
 node_modules/
 dist/
 /public/
+release/
 .DS_Store
 client/src/routeTree.gen.ts

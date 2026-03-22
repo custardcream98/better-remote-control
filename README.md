@@ -27,11 +27,27 @@ Built for running [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 
 
 ## Quick Start
 
+### Install (no Node.js required)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/custardcream98/better-remote-control/main/install.sh | sh
+```
+
+Or download a standalone binary from [GitHub Releases](https://github.com/custardcream98/better-remote-control/releases).
+
+### With npm
+
+```bash
+npx better-remote-control
+```
+
+### From source
+
 ```bash
 git clone https://github.com/custardcream98/better-remote-control.git
 cd better-remote-control
-pnpm install && pnpm run build
-pnpm start
+pnpm install && cd client && pnpm install && cd ..
+pnpm run build && pnpm start
 ```
 
 A QR code appears in your terminal. Scan it, enter the password, and you're in.
@@ -140,11 +156,24 @@ brc --password mysecretpassword
 
 ## Prerequisites
 
-| Requirement       | Install                                      |
-| ----------------- | -------------------------------------------- |
-| **Node.js** >= 18 | [nodejs.org](https://nodejs.org)             |
-| **pnpm**          | `npm install -g pnpm`                        |
-| **cloudflared**   | `brew install cloudflared` (only for tunnel) |
+**cloudflared** is required for remote access via Cloudflare Tunnel:
+
+```bash
+brew install cloudflared   # macOS
+# or see https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/
+```
+
+Without cloudflared, brc still works on your local network with `--no-tunnel`.
+
+<details>
+<summary><b>Building from source</b></summary>
+
+| Requirement       | Install                          |
+| ----------------- | -------------------------------- |
+| **Node.js** >= 18 | [nodejs.org](https://nodejs.org) |
+| **pnpm**          | `npm install -g pnpm`            |
+
+</details>
 
 ## License
 

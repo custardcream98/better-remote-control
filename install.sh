@@ -111,21 +111,36 @@ main() {
 
   # ── PATH setup ──────────────────────────────────────────────────
 
+  EXPORT_LINE="export PATH=\"$BIN_DIR:\$PATH\""
+
   case ":$PATH:" in
     *":$BIN_DIR:"*) ;; # Already in PATH
     *)
-      echo "Add the following to your shell profile (~/.zshrc, ~/.bashrc, etc.):"
-      echo ""
-      echo "  export PATH=\"$BIN_DIR:\$PATH\""
-      echo ""
-      echo "Then restart your terminal, or run:"
-      echo ""
-      echo "  export PATH=\"$BIN_DIR:\$PATH\""
+      # Detect shell profile
+      PROFILE=""
+      if [ -n "$ZSH_VERSION" ] || [ "$(basename "$SHELL")" = "zsh" ]; then
+        PROFILE="$HOME/.zshrc"
+      elif [ -f "$HOME/.bashrc" ]; then
+        PROFILE="$HOME/.bashrc"
+      elif [ -f "$HOME/.bash_profile" ]; then
+        PROFILE="$HOME/.bash_profile"
+      fi
+
+      if [ -n "$PROFILE" ] && ! grep -q "$BIN_DIR" "$PROFILE" 2>/dev/null; then
+        echo "" >> "$PROFILE"
+        echo "# brc" >> "$PROFILE"
+        echo "$EXPORT_LINE" >> "$PROFILE"
+        echo "✓ Added brc to PATH in $PROFILE"
+      else
+        echo "Add to your shell profile:"
+        echo ""
+        echo "  $EXPORT_LINE"
+      fi
       echo ""
       ;;
   esac
 
-  echo "Run 'brc' to start."
+  echo "Run 'brc' to start. (You may need to restart your terminal)"
 }
 
 main

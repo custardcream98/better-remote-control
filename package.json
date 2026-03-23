@@ -1,6 +1,6 @@
 {
   "name": "better-remote-control",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Access your local terminal from a mobile browser via Cloudflare Tunnel",
   "type": "module",
   "bin": {

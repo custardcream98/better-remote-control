@@ -31,12 +31,12 @@ beforeEach(() => {
 });
 
 describe("findCloudflared", () => {
-  it("시스템 PATH에 있으면 'cloudflared' 반환", () => {
+  it("returns 'cloudflared' when found in system PATH", () => {
     vi.mocked(execSync).mockReturnValue(Buffer.from("/usr/local/bin/cloudflared"));
     expect(findCloudflared()).toBe("cloudflared");
   });
 
-  it("PATH에 없고 ~/.brc/bin/에 있으면 로컬 경로 반환", () => {
+  it("returns local path when not in PATH but exists in ~/.brc/bin/", () => {
     vi.mocked(execSync).mockImplementation(() => {
       throw new Error("not found");
     });
@@ -44,7 +44,7 @@ describe("findCloudflared", () => {
     expect(findCloudflared()).toMatch(/\.brc\/bin\/cloudflared/);
   });
 
-  it("어디에도 없으면 null 반환", () => {
+  it("returns null when not found anywhere", () => {
     vi.mocked(execSync).mockImplementation(() => {
       throw new Error("not found");
     });
@@ -52,7 +52,7 @@ describe("findCloudflared", () => {
     expect(findCloudflared()).toBeNull();
   });
 
-  it("시스템 PATH에 있으면 로컬 경로 확인하지 않음", () => {
+  it("prefers system PATH over local install", () => {
     vi.mocked(execSync).mockReturnValue(Buffer.from(""));
     expect(findCloudflared()).toBe("cloudflared");
     expect(existsSync).not.toHaveBeenCalled();
@@ -68,7 +68,7 @@ describe("getDownloadInfo", () => {
     Object.defineProperty(process, "arch", { value: originalArch });
   });
 
-  it("macOS ARM64는 .tgz (compressed)", () => {
+  it("returns compressed .tgz URL for macOS ARM64", () => {
     Object.defineProperty(process, "platform", { value: "darwin" });
     Object.defineProperty(process, "arch", { value: "arm64" });
     const info = getDownloadInfo();
@@ -76,7 +76,7 @@ describe("getDownloadInfo", () => {
     expect(info.compressed).toBe(true);
   });
 
-  it("macOS x64는 .tgz (compressed)", () => {
+  it("returns compressed .tgz URL for macOS x64", () => {
     Object.defineProperty(process, "platform", { value: "darwin" });
     Object.defineProperty(process, "arch", { value: "x64" });
     const info = getDownloadInfo();
@@ -84,7 +84,7 @@ describe("getDownloadInfo", () => {
     expect(info.compressed).toBe(true);
   });
 
-  it("Linux x64는 raw binary (non-compressed)", () => {
+  it("returns raw binary URL for Linux x64", () => {
     Object.defineProperty(process, "platform", { value: "linux" });
     Object.defineProperty(process, "arch", { value: "x64" });
     const info = getDownloadInfo();
@@ -93,7 +93,7 @@ describe("getDownloadInfo", () => {
     expect(info.compressed).toBe(false);
   });
 
-  it("Windows x64는 .exe (non-compressed)", () => {
+  it("returns .exe URL for Windows x64", () => {
     Object.defineProperty(process, "platform", { value: "win32" });
     Object.defineProperty(process, "arch", { value: "x64" });
     const info = getDownloadInfo();
@@ -101,13 +101,13 @@ describe("getDownloadInfo", () => {
     expect(info.compressed).toBe(false);
   });
 
-  it("지원하지 않는 아키텍처면 에러", () => {
+  it("throws on unsupported architecture", () => {
     Object.defineProperty(process, "platform", { value: "linux" });
     Object.defineProperty(process, "arch", { value: "s390x" });
     expect(() => getDownloadInfo()).toThrow("Unsupported architecture");
   });
 
-  it("지원하지 않는 플랫폼이면 에러", () => {
+  it("throws on unsupported platform", () => {
     Object.defineProperty(process, "platform", { value: "freebsd" });
     Object.defineProperty(process, "arch", { value: "x64" });
     expect(() => getDownloadInfo()).toThrow("Unsupported platform");
@@ -115,12 +115,12 @@ describe("getDownloadInfo", () => {
 });
 
 describe("downloadCloudflared", () => {
-  it("HTTP 에러 시 throw", async () => {
+  it("throws on HTTP error", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 404, body: null }));
     await expect(downloadCloudflared()).rejects.toThrow("Download failed (HTTP 404)");
   });
 
-  it("~/.brc/bin/ 디렉토리 생성", async () => {
+  it("creates ~/.brc/bin/ directory", async () => {
     const mockBody = new ReadableStream({
       start(controller) {
         controller.enqueue(new Uint8Array([0]));
@@ -129,14 +129,13 @@ describe("downloadCloudflared", () => {
     });
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, body: mockBody }));
 
-    // non-compressed 플랫폼으로 설정
     Object.defineProperty(process, "platform", { value: "linux" });
     Object.defineProperty(process, "arch", { value: "x64" });
 
     try {
       await downloadCloudflared();
     } catch {
-      // pipeline mock으로 인해 실패할 수 있음
+      // may fail due to pipeline mock
     }
 
     expect(mkdirSync).toHaveBeenCalledWith(expect.stringContaining(".brc/bin"), {
@@ -144,7 +143,7 @@ describe("downloadCloudflared", () => {
     });
   });
 
-  it("Windows가 아니면 chmod 755 설정", async () => {
+  it("sets chmod 755 on non-Windows platforms", async () => {
     const mockBody = new ReadableStream({
       start(controller) {
         controller.enqueue(new Uint8Array([0]));

@@ -14,7 +14,7 @@ function getCurrentVersion(): string {
 async function getLatestVersion(): Promise<string | null> {
   try {
     const res = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
-      signal: AbortSignal.timeout(3000),
+      signal: AbortSignal.timeout(1000),
     });
     if (!res.ok) return null;
     const data = (await res.json()) as { tag_name?: string };

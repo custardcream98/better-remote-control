@@ -7,6 +7,7 @@ import { parseArgs } from "node:util";
 import { generatePassword } from "./auth.js";
 import { createServer } from "./server.js";
 import { downloadCloudflared, findCloudflared, startTunnel } from "./tunnel.js";
+import { checkForUpdate } from "./update-check.js";
 
 import type { ChildProcess } from "node:child_process";
 
@@ -77,6 +78,9 @@ async function main() {
   console.log();
   console.log("  \x1b[1m\x1b[35mbrc\x1b[0m — Better Remote Control");
   console.log();
+
+  // 업데이트 확인 (비동기, 서버 시작을 블로킹하지 않음)
+  await checkForUpdate();
 
   // Prevent sleep
   let caffeinateProc: ChildProcess | null = null;

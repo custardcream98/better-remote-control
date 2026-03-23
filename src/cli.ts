@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import { spawn } from "node:child_process";
+import { createInterface } from "node:readline/promises";
 import { parseArgs } from "node:util";
 
 import { generatePassword } from "./auth.js";
 import { createServer } from "./server.js";
-import { isCloudflaredInstalled, startTunnel } from "./tunnel.js";
+import { downloadCloudflared, findCloudflared, startTunnel } from "./tunnel.js";
 
 import type { ChildProcess } from "node:child_process";
 
@@ -103,22 +104,41 @@ async function main() {
     return;
   }
 
-  // Cloudflare Tunnel
-  if (!isCloudflaredInstalled()) {
-    console.log();
-    console.log("  \x1b[31m✗\x1b[0m cloudflared is not installed.");
-    console.log("    brew install cloudflared");
-    console.log();
-    console.log(`  For local-only use: brc --no-tunnel`);
-    console.log(`  Password: \x1b[1m\x1b[33m${password}\x1b[0m`);
-    console.log();
-    return;
+  // Cloudflare Tunnel — 자동 설치 지원
+  let cloudflaredPath = findCloudflared();
+
+  if (!cloudflaredPath) {
+    const rl = createInterface({ input: process.stdin, output: process.stdout });
+    const answer = await rl.question("  cloudflared not found. Install automatically? (Y/n) ");
+    rl.close();
+
+    if (answer.toLowerCase() === "n") {
+      console.log();
+      console.log(`  For local-only use: brc --no-tunnel`);
+      console.log(`  Password: \x1b[1m\x1b[33m${password}\x1b[0m`);
+      console.log();
+      return;
+    }
+
+    console.log("  Downloading cloudflared...");
+    try {
+      cloudflaredPath = await downloadCloudflared();
+      console.log("  \x1b[32m✓\x1b[0m cloudflared installed");
+    } catch (err) {
+      console.error(`  \x1b[31m✗\x1b[0m ${(err as Error).message}`);
+      console.log();
+      console.log(`  Install manually: brew install cloudflared`);
+      console.log(`  Or use local-only: brc --no-tunnel`);
+      console.log(`  Password: \x1b[1m\x1b[33m${password}\x1b[0m`);
+      console.log();
+      return;
+    }
   }
 
   console.log("  Connecting tunnel...");
 
   try {
-    const { url, process: tunnelProc } = await startTunnel(port);
+    const { url, process: tunnelProc } = await startTunnel(port, cloudflaredPath);
 
     console.log(`  \x1b[32m✓\x1b[0m Tunnel ready`);
     console.log();

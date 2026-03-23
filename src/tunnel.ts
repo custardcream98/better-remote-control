@@ -33,7 +33,7 @@ export function findCloudflared(): string | null {
 }
 
 /** 현재 플랫폼에 맞는 다운로드 URL 반환 */
-function getDownloadInfo(): { url: string; compressed: boolean } {
+export function getDownloadInfo(): { url: string; compressed: boolean } {
   const archMap: Record<string, string> = { x64: "amd64", arm64: "arm64" };
   const arch = archMap[process.arch];
   if (!arch) throw new Error(`Unsupported architecture: ${process.arch}`);

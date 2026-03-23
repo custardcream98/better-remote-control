@@ -15,7 +15,9 @@
     "searchPlaceholder": "Find in terminal\u2026",
     "searchPrevious": "Previous match",
     "searchNext": "Next match",
-    "closeSearch": "Close search"
+    "closeSearch": "Close search",
+    "copyText": "Text view",
+    "textView": "Text View"
   },
   "config": {
     "connected": "Connected",

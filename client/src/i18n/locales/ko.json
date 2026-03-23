@@ -15,7 +15,9 @@
     "searchPlaceholder": "터미널에서 찾기\u2026",
     "searchPrevious": "이전 결과",
     "searchNext": "다음 결과",
-    "closeSearch": "검색 닫기"
+    "closeSearch": "검색 닫기",
+    "copyText": "텍스트 보기",
+    "textView": "텍스트 보기"
   },
   "config": {
     "connected": "연결됨",

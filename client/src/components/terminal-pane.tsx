@@ -22,6 +22,11 @@ export interface TerminalSearchHandle {
   clearSearch: () => void;
 }
 
+export interface TerminalBufferHandle {
+  /** Extract all text from the terminal buffer */
+  getText: () => string;
+}
+
 interface TerminalPaneProps {
   sessionId: string;
   send: (msg: ClientMessage) => void;
@@ -30,6 +35,8 @@ interface TerminalPaneProps {
   onReady: (write: (data: string) => void) => void;
   /** Register search handle */
   onSearchReady?: (handle: TerminalSearchHandle) => void;
+  /** Register buffer handle for text extraction */
+  onBufferReady?: (handle: TerminalBufferHandle) => void;
   /** Callback when terminal bell occurs */
   onBell?: () => void;
 }
@@ -40,6 +47,7 @@ export function TerminalPane({
   fontSize,
   onReady,
   onSearchReady,
+  onBufferReady,
   onBell,
 }: TerminalPaneProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -103,6 +111,19 @@ export function TerminalPane({
       findNext: (q) => search.findNext(q),
       findPrevious: (q) => search.findPrevious(q),
       clearSearch: () => search.clearDecorations(),
+    });
+
+    // Expose buffer handle for text extraction
+    onBufferReady?.({
+      getText: () => {
+        const buf = term.buffer.active;
+        const lines: string[] = [];
+        for (let i = 0; i < buf.length; i++) {
+          const line = buf.getLine(i);
+          if (line) lines.push(line.translateToString(true));
+        }
+        return lines.join("\n");
+      },
     });
 
     // Bell event

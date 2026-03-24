@@ -359,7 +359,7 @@ export function createServer({ port, password, shell, defaultCwd, defaultCommand
   // SPA fallback — TanStack Router handles client-side routing
   app.get("/{*splat}", (req, res, next) => {
     if (req.path.startsWith("/api/") || req.path === "/login") return next();
-    res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+    res.sendFile("index.html", { root: path.join(__dirname, "..", "public") });
   });
 
   // Start HTTP server

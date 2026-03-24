@@ -140,7 +140,24 @@ main() {
       ;;
   esac
 
-  echo "Run 'brc' to start. (You may need to restart your terminal)"
+  case ":$PATH:" in
+  *":$BIN_DIR:"*)
+    echo "Run 'brc' to start."
+    ;;
+  *)
+    echo "To start using brc right now, run:"
+    echo ""
+    if [ -n "$PROFILE" ]; then
+      echo "  source $PROFILE"
+    else
+      echo "  export PATH=\"$BIN_DIR:\$PATH\""
+    fi
+    echo ""
+    echo "Or run directly:"
+    echo ""
+    echo "  $BIN_DIR/brc"
+    ;;
+esac
 }
 
 main
